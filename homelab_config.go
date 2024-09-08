@@ -186,7 +186,7 @@ func parseHomelabConfig() (*HomelabConfig, error) {
 	// TODO Scan for all config files under this directory instead.
 	configFile, err := os.Open(fmt.Sprintf("%s/homelab.yaml", path))
 	if err != nil {
-		return nil, fmt.Errorf("failed to read homelab config file, reason: %w", err)
+		return nil, fmt.Errorf("failed to open homelab config file, reason: %w", err)
 	}
 	defer configFile.Close()
 

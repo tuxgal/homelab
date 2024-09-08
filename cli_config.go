@@ -39,12 +39,16 @@ func parseCLIConfig() (*CLIConfig, error) {
 		return nil, err
 	}
 
-	configFile, err := os.ReadFile(path)
+	configFile, err := os.Open(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to read homelab CLI config file, reason: %w", err)
+		return nil, fmt.Errorf("failed to open homelab CLI config file, reason: %w", err)
 	}
+	defer configFile.Close()
+
 	var config CLIConfig
-	err = yaml.Unmarshal(configFile, &config)
+	dec := yaml.NewDecoder(configFile)
+	dec.KnownFields(true)
+	err = dec.Decode(&config)
 	if err != nil {
 		return nil, fmt.Errorf("failed to parse homelab CLI config, reason: %w", err)
 	}
