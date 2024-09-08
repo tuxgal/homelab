@@ -36,9 +36,7 @@ func run() int {
 	if !validateFlags() {
 		return 1
 	}
-
-	// TODO: Actually do something with the parsed homelab config.
-	_, err := parseHomelabConfig()
+	err := handleSubCommand()
 	if err != nil {
 		log.Errorf("%s", err)
 		return 1
