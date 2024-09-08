@@ -170,7 +170,7 @@ type Label struct {
 func homelabConfigsPath() (string, error) {
 	// Use the flag from the command line if present.
 	if isFlagPassed(homelabConfigsDirFlag) {
-		log.Infof("Using Homelab configs path from command line flag: %s", *homelabConfigsDir)
+		log.Debugf("Using Homelab configs path from command line flag: %s", *homelabConfigsDir)
 		return *homelabConfigsDir, nil
 	}
 	path, err := configsPath()
@@ -178,7 +178,7 @@ func homelabConfigsPath() (string, error) {
 		return "", err
 	}
 
-	log.Infof("Using Homelab configs path from CLI config: %s", path)
+	log.Debugf("Using Homelab configs path from CLI config: %s", path)
 	return path, nil
 }
 
@@ -195,7 +195,7 @@ func mergedConfigReader(path string) (io.Reader, error) {
 			return nil
 		}
 
-		log.Infof("Picked up homelab config: %s", p)
+		log.Debugf("Picked up homelab config: %s", p)
 		configFile, err := os.ReadFile(p)
 		if err != nil {
 			return fmt.Errorf("failed to read homelab config file %q, reason: %w", p, err)
@@ -245,6 +245,6 @@ func parseHomelabConfig() (*HomelabConfig, error) {
 		return nil, fmt.Errorf("failed to parse homelab config, reason: %w", err)
 	}
 
-	log.Infof("Homelab Config:\n%v\n", prettyPrintJSON(config))
+	log.Tracef("Homelab Config:\n%v\n", prettyPrintJSON(config))
 	return &config, nil
 }

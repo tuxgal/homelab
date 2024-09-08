@@ -17,7 +17,7 @@ type CLIConfig struct {
 func cliConfigPath() (string, error) {
 	// Use the flag from the command line if present.
 	if isFlagPassed(cliConfigFlag) {
-		log.Infof("Using Homelab CLI config path from command line flag: %s", *cliConfig)
+		log.Debugf("Using Homelab CLI config path from command line flag: %s", *cliConfig)
 		return *cliConfig, nil
 	}
 	// Fall back to the default path - "~/.homelab/config.yaml".
@@ -29,7 +29,7 @@ func cliConfigPath() (string, error) {
 	if err != nil {
 		return "", fmt.Errorf("failed to determine absolute path of the homelab CLI config, reason: %w", err)
 	}
-	log.Infof("Using default Homelab CLI config path: %s", path)
+	log.Debugf("Using default Homelab CLI config path: %s", path)
 	return path, nil
 }
 
@@ -53,7 +53,7 @@ func parseCLIConfig() (*CLIConfig, error) {
 		return nil, fmt.Errorf("failed to parse homelab CLI config, reason: %w", err)
 	}
 
-	log.Debugf("Homelab CLI Config:\n%v\n", prettyPrintJSON(config))
+	log.Tracef("Homelab CLI Config:\n%v\n", prettyPrintJSON(config))
 	return &config, nil
 }
 
