@@ -15,7 +15,7 @@ import (
 // HomelabConfig represents the entire homelab deployment configuration.
 type HomelabConfig struct {
 	Global GlobalConfig           `yaml:"global"`
-	Ipam   IPAMConfig             `yaml:"ipam"`
+	IPAM   IPAMConfig             `yaml:"ipam"`
 	Hosts  []HostConfig           `yaml:"hosts"`
 	Groups []ContainerGroupConfig `yaml:"groups"`
 }
@@ -35,8 +35,9 @@ type GlobalConfig struct {
 // substituted in all string field values read from the homelab
 // configuration file.
 type EnvConfig struct {
-	Var   string `yaml:"var"`
-	Value string `yaml:"value"`
+	Var          string `yaml:"var"`
+	Value        string `yaml:"value"`
+	ValueCommand string `yaml:"valueCommand"`
 }
 
 // IPAMConfig represents the IP Addressing and management information for
@@ -49,8 +50,8 @@ type IPAMConfig struct {
 
 // NetworksConfig represents all networks in the homelab configuration.
 type NetworksConfig struct {
-	BridgeModeNetworks []BridgeModeNetworkConfig `yaml:"standardNetworks"`
-	ContainerNetworks  []ContainerNetworkConfig  `yaml:"containerNetworks"`
+	BridgeModeNetworks []BridgeModeNetworkConfig    `yaml:"standardNetworks"`
+	ContainerNetworks  []ContainerModeNetworkConfig `yaml:"containerNetworks"`
 }
 
 // BridgeModeNetworkConfig represents a docker bridge mode network that one
@@ -61,9 +62,9 @@ type BridgeModeNetworkConfig struct {
 	Cidr              string `yaml:"cidr"`
 }
 
-// ContainerNetworkConfig represents a container network meant to attach a
+// ContainerModeNetworkConfig represents a container network meant to attach a
 // container to another container's network stack.
-type ContainerNetworkConfig struct {
+type ContainerModeNetworkConfig struct {
 	Name       string               `yaml:"name"`
 	Containers []ContainerReference `yaml:"containers"`
 }
