@@ -113,7 +113,7 @@ type ContainerConfig struct {
 	PullImageAfterStop      bool                  `yaml:"pullImageAfterStop"`
 	StartPreHook            string                `yaml:"startPreHook"`
 	User                    string                `yaml:"user"`
-	Group                   string                `yaml:"group"`
+	UserGroup               string                `yaml:"group"`
 	GroupAdd                []string              `yaml:"groupAdd"`
 	HostName                string                `yaml:"hostName"`
 	DomainName              string                `yaml:"domainName"`
