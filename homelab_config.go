@@ -1,9 +1,14 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
+	"io"
+	"io/fs"
 	"os"
+	"path/filepath"
 
+	"github.com/TwiN/deepmerge"
 	"gopkg.in/yaml.v3"
 )
 
@@ -165,7 +170,7 @@ type Label struct {
 func homelabConfigsPath() (string, error) {
 	// Use the flag from the command line if present.
 	if isFlagPassed(homelabConfigsDirFlag) {
-		log.Infof("Using Homelab configs path from command line flag: %q", *homelabConfigsDir)
+		log.Infof("Using Homelab configs path from command line flag: %s", *homelabConfigsDir)
 		return *homelabConfigsDir, nil
 	}
 	path, err := configsPath()
@@ -173,8 +178,44 @@ func homelabConfigsPath() (string, error) {
 		return "", err
 	}
 
-	log.Infof("Using Homelab configs path from CLI config: %q", path)
+	log.Infof("Using Homelab configs path from CLI config: %s", path)
 	return path, nil
+}
+
+func mergedConfigReader(path string) (io.Reader, error) {
+	var result []byte
+	err := filepath.WalkDir(path, func(p string, d fs.DirEntry, err error) error {
+		if err != nil {
+			return err
+		} else if d == nil || d.IsDir() {
+			return nil
+		}
+		ext := filepath.Ext(p)
+		if ext != ".yml" && ext != ".yaml" {
+			return nil
+		}
+
+		log.Infof("Picked up homelab config: %s", p)
+		configFile, err := os.ReadFile(p)
+		if err != nil {
+			return fmt.Errorf("failed to read homelab config file %q, reason: %w", p, err)
+		}
+		result, err = deepmerge.YAML(result, configFile)
+		if err != nil {
+			return fmt.Errorf("failed to deep merge config file %q, reason: %w", p, err)
+		}
+		return nil
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	if len(result) == 0 {
+		return nil, fmt.Errorf("no homelab configs found in %s", path)
+	}
+
+	return bytes.NewReader(result), nil
 }
 
 func parseHomelabConfig() (*HomelabConfig, error) {
@@ -183,12 +224,18 @@ func parseHomelabConfig() (*HomelabConfig, error) {
 		return nil, err
 	}
 
-	// TODO Scan for all config files under this directory instead.
-	configFile, err := os.Open(fmt.Sprintf("%s/homelab.yaml", path))
+	pathStat, err := os.Stat(path)
 	if err != nil {
-		return nil, fmt.Errorf("failed to open homelab config file, reason: %w", err)
+		return nil, fmt.Errorf("os.Stat() failed on homelab configs path, reason: %w", err)
 	}
-	defer configFile.Close()
+	if !pathStat.IsDir() {
+		return nil, fmt.Errorf("homelab configs path %q must be a directory", path)
+	}
+
+	configFile, err := mergedConfigReader(path)
+	if err != nil {
+		return nil, err
+	}
 
 	var config HomelabConfig
 	dec := yaml.NewDecoder(configFile)
@@ -198,6 +245,6 @@ func parseHomelabConfig() (*HomelabConfig, error) {
 		return nil, fmt.Errorf("failed to parse homelab config, reason: %w", err)
 	}
 
-	fmt.Printf("%v\n", prettyPrintJSON(config))
+	log.Infof("Homelab Config:\n%v\n", prettyPrintJSON(config))
 	return &config, nil
 }
