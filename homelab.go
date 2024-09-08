@@ -10,6 +10,10 @@ import (
 	"github.com/tuxdude/zzzlogi"
 )
 
+const (
+	defaultCLIConfigPathFormat = "%s/.homelab/config.yaml"
+)
+
 var (
 	log = buildLogger()
 )
@@ -21,7 +25,16 @@ func buildLogger() zzzlogi.Logger {
 }
 
 func run() int {
-	log.Infof("Hello from homelab!")
+	if !validateFlags() {
+		return 1
+	}
+
+	// TODO: Actually do something with the parsed homelab config.
+	_, err := parseHomelabConfig()
+	if err != nil {
+		log.Errorf("%s", err)
+		return 1
+	}
 	return 0
 }
 
