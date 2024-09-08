@@ -7,8 +7,10 @@ import (
 
 var (
 	showConfigCmd = "showconfig"
+	startCmd      = "start"
 	cmdHandlers   = map[string]cmd{
 		showConfigCmd: newShowConfigCmdHandler(),
+		startCmd:      newStartCmdHandler(),
 	}
 )
 
@@ -25,9 +27,9 @@ func handleSubCommand() error {
 		return fmt.Errorf("Invalid command: %s", scmd)
 	}
 
-	fs := flag.NewFlagSet(args[0], flag.ExitOnError)
+	fs := flag.NewFlagSet(scmd, flag.ExitOnError)
 	handler.updateFlagSet(fs)
-	err := fs.Parse(args)
+	err := fs.Parse(args[1:])
 	if err != nil {
 		return fmt.Errorf("failed to parse flags for %s command, reason: %w", scmd, err)
 	}

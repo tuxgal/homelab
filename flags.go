@@ -30,3 +30,15 @@ func validateFlags() bool {
 	}
 	return true
 }
+
+type containerAndGroupFlags struct {
+	allGroups bool
+	group     string
+	container string
+}
+
+func addContainerAndGroupFlags(fs *flag.FlagSet, c *containerAndGroupFlags) {
+	fs.BoolVar(&c.allGroups, "allGroups", false, "Whether to apply this command across all groups and containers within")
+	fs.StringVar(&c.group, "group", "", "The container group to apply this command")
+	fs.StringVar(&c.container, "container", "", "The container to apply this command")
+}
