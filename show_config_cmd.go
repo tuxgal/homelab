@@ -14,7 +14,8 @@ func (s *showConfigCmdHandler) updateFlagSet(fs *flag.FlagSet) {
 }
 
 func (s *showConfigCmdHandler) run() error {
-	config, err := parseHomelabConfig()
+	config := HomelabConfig{}
+	err := parseHomelabConfig(&config)
 	if err != nil {
 		return err
 	}
