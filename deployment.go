@@ -72,7 +72,7 @@ func newDeployment(config *HomelabConfig) *deployment {
 
 	groups := make(containerGroupList, 0, len(config.Groups))
 	for _, g := range config.Groups {
-		groups = append(groups, newContainerGroup(&d, &g))
+		groups = append(groups, newContainerGroup(&d, &g, &config.Containers))
 	}
 	d.groups = groups
 
@@ -115,15 +115,17 @@ func (d *deployment) String() string {
 	return fmt.Sprintf("Deployment{Groups:%s, Networks:%s}", d.groups, d.networks)
 }
 
-func newContainerGroup(dep *deployment, config *ContainerGroupConfig) *containerGroup {
+func newContainerGroup(dep *deployment, groupConfig *ContainerGroupConfig, containerConfigs *[]ContainerConfig) *containerGroup {
 	g := containerGroup{
 		deployment: dep,
-		config:     config,
+		config:     groupConfig,
 	}
 
-	containers := make(containerList, 0, len(config.Containers))
-	for _, c := range config.Containers {
-		containers = append(containers, newContainer(&g, &c))
+	containers := make(containerList, 0)
+	for _, c := range *containerConfigs {
+		if c.ParentGroup == groupConfig.Name {
+			containers = append(containers, newContainer(&g, &c))
+		}
 	}
 	g.containers = containers
 

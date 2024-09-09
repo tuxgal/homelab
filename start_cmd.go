@@ -53,6 +53,5 @@ func (s *startCmdHandler) run(options *cmdOptions) error {
 	}
 
 	log.Infof("Result containers =\n%s", containers)
-
 	return nil
 }

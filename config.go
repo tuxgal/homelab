@@ -14,10 +14,11 @@ import (
 
 // HomelabConfig represents the entire homelab deployment configuration.
 type HomelabConfig struct {
-	Global GlobalConfig           `yaml:"global"`
-	IPAM   IPAMConfig             `yaml:"ipam"`
-	Hosts  []HostConfig           `yaml:"hosts"`
-	Groups []ContainerGroupConfig `yaml:"groups"`
+	Global     GlobalConfig           `yaml:"global"`
+	IPAM       IPAMConfig             `yaml:"ipam"`
+	Hosts      []HostConfig           `yaml:"hosts"`
+	Groups     []ContainerGroupConfig `yaml:"groups"`
+	Containers []ContainerConfig      `yaml:"containers"`
 }
 
 // GlobalConfig represents the configuration that will be applied
@@ -28,6 +29,7 @@ type GlobalConfig struct {
 	ContainerStopTimeout int            `yaml:"containerStopTimeout"`
 	RestartPolicy        string         `yaml:"restartPolicy"`
 	TimeZone             string         `yaml:"timeZone"`
+	DomainName           string         `yaml:"domainName"`
 	DNSSearch            string         `yaml:"dnsSearch"`
 }
 
@@ -79,6 +81,7 @@ type ContainerIPConfig struct {
 // HostConfig represents the host specific information.
 type HostConfig struct {
 	Name              string               `yaml:"name"`
+	HumanFriendlyName string               `yaml:"humanFriendlyName"`
 	AllowedContainers []ContainerReference `yaml:"allowedContainers"`
 }
 
@@ -91,15 +94,14 @@ type ContainerReference struct {
 // ContainerGroupConfig represents a single logical container group, which is
 // basically a collection of containers within.
 type ContainerGroupConfig struct {
-	Name           string            `yaml:"name"`
-	Order          int               `yaml:"order"`
-	PrimaryNetwork string            `yaml:"primaryNetwork"`
-	Containers     []ContainerConfig `yaml:"containers"`
+	Name  string `yaml:"name"`
+	Order int    `yaml:"order"`
 }
 
 // ContainerConfig represents a single docker container.
 type ContainerConfig struct {
 	Name                    string                `yaml:"name"`
+	ParentGroup             string                `yaml:"parentGroup"`
 	Image                   string                `yaml:"image"`
 	Order                   int                   `yaml:"order"`
 	ContainerStopTimeout    int                   `yaml:"containerStopTimeout"`
