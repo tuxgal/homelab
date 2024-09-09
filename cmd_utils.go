@@ -1,6 +1,6 @@
 package main
 
-func queryContainers(dep *deployment, options *cmdOptions) containerList {
+func queryContainers(dep *deployment, options *cmdOptions) containerMap {
 	if options.containerAndGroup.allGroups {
 		return dep.queryAllContainers()
 	} else if options.containerAndGroup.group != "" && options.containerAndGroup.container == "" {
@@ -8,7 +8,7 @@ func queryContainers(dep *deployment, options *cmdOptions) containerList {
 	} else if options.containerAndGroup.group != "" {
 		c := dep.queryContainer(options.containerAndGroup.group, options.containerAndGroup.container)
 		if c != nil {
-			return containerList{c}
+			return containerMap{c.config.Name: c}
 		}
 		return nil
 	}

@@ -2,25 +2,24 @@ package main
 
 import (
 	"fmt"
-	"strings"
 )
 
 type deployment struct {
 	config   *HomelabConfig
-	groups   containerGroupList
-	networks networkList
+	groups   containerGroupMap
+	networks networkMap
 }
 
 type containerGroup struct {
 	config     *ContainerGroupConfig
 	deployment *deployment
-	containers containerList
+	containers containerMap
 }
 
 type container struct {
-	config           *ContainerConfig
-	group            *containerGroup
-	networkEndpoints containerIPList
+	config *ContainerConfig
+	group  *containerGroup
+	ips    networkIPMap
 }
 
 type containerIP struct {
@@ -43,10 +42,10 @@ type network struct {
 	containerModeConfig *ContainerModeNetworkConfig
 }
 
-type containerGroupList []*containerGroup
-type containerList []*container
-type networkList []*network
-type containerIPList []*containerIP
+type containerGroupMap map[string]*containerGroup
+type containerMap map[string]*container
+type networkMap map[string]*network
+type networkIPMap map[string]*containerIP
 
 func newBridgeModeContainerIP(network *network, ip string) *containerIP {
 	return &containerIP{network: network, IP: ip}
@@ -61,37 +60,44 @@ func newDeployment(config *HomelabConfig) *deployment {
 
 	// First build the networks as it will be looked up while building
 	// the container groups and containers within.
-	networks := make(networkList, 0, len(config.IPAM.Networks.BridgeModeNetworks)+len(config.IPAM.Networks.ContainerModeNetworks))
+	networks := make(networkMap)
 	for _, n := range config.IPAM.Networks.BridgeModeNetworks {
-		networks = append(networks, newBridgeModeNetwork(&d, &n))
+		nt := newBridgeModeNetwork(&d, &n)
+		networks[nt.Name()] = nt
 	}
 	for _, n := range config.IPAM.Networks.ContainerModeNetworks {
-		networks = append(networks, newContainerModeNetwork(&d, &n))
+		nt := newContainerModeNetwork(&d, &n)
+		networks[nt.Name()] = nt
 	}
 	d.networks = networks
 
-	groups := make(containerGroupList, 0, len(config.Groups))
+	groups := make(containerGroupMap)
 	for _, g := range config.Groups {
-		groups = append(groups, newContainerGroup(&d, &g, &config.Containers))
+		cg := newContainerGroup(&d, &g, &config.Containers)
+		groups[cg.Name()] = cg
 	}
 	d.groups = groups
 
 	return &d
 }
 
-func (d *deployment) queryAllContainers() containerList {
-	result := make(containerList, 0)
+func (d *deployment) queryAllContainers() containerMap {
+	result := make(containerMap)
 	for _, g := range d.groups {
-		result = append(result, g.containers...)
+		for _, c := range g.containers {
+			result[c.Name()] = c
+		}
 	}
 	return result
 }
 
-func (d *deployment) queryAllContainersInGroup(group string) containerList {
-	result := make(containerList, 0)
+func (d *deployment) queryAllContainersInGroup(group string) containerMap {
+	result := make(containerMap)
 	for _, g := range d.groups {
-		if g.config.Name == group {
-			result = append(result, g.containers...)
+		if g.Name() == group {
+			for _, c := range g.containers {
+				result[c.Name()] = c
+			}
 			break
 		}
 	}
@@ -99,10 +105,11 @@ func (d *deployment) queryAllContainersInGroup(group string) containerList {
 }
 
 func (d *deployment) queryContainer(group string, container string) *container {
+	cn := containerName(group, container)
 	for _, g := range d.groups {
-		if g.config.Name == group {
+		if g.Name() == group {
 			for _, c := range g.containers {
-				if c.config.Name == container {
+				if c.Name() == cn {
 					return c
 				}
 			}
@@ -121,10 +128,11 @@ func newContainerGroup(dep *deployment, groupConfig *ContainerGroupConfig, conta
 		config:     groupConfig,
 	}
 
-	containers := make(containerList, 0)
+	containers := make(containerMap)
 	for _, c := range *containerConfigs {
-		if c.ParentGroup == groupConfig.Name {
-			containers = append(containers, newContainer(&g, &c))
+		if c.ParentGroup == g.Name() {
+			ct := newContainer(&g, &c)
+			containers[ct.Name()] = ct
 		}
 	}
 	g.containers = containers
@@ -132,69 +140,55 @@ func newContainerGroup(dep *deployment, groupConfig *ContainerGroupConfig, conta
 	return &g
 }
 
-func (c *containerGroup) String() string {
-	return fmt.Sprintf("Group{Name:%s Containers:%s}", c.config.Name, c.containers)
+func (c *containerGroup) Name() string {
+	return c.config.Name
 }
 
-func (c containerGroupList) String() string {
-	var sb strings.Builder
-	sb.WriteString("[")
-	if len(c) > 0 {
-		sb.WriteString(c[0].String())
-	} else {
-		sb.WriteString("empty")
-	}
-	for i := 1; i < len(c); i++ {
-		sb.WriteString(fmt.Sprintf(", %s", c[i]))
-	}
-	sb.WriteString("]")
-	return sb.String()
+func (c *containerGroup) String() string {
+	return fmt.Sprintf("Group{Name:%s Containers:%s}", c.Name(), c.containers)
+}
+
+func (c containerGroupMap) String() string {
+	return stringifyMap(c)
 }
 
 func newContainer(group *containerGroup, config *ContainerConfig) *container {
 	c := container{group: group, config: config}
 	cName := config.Name
-	gName := group.config.Name
+	gName := group.Name()
 
-	networkEndpoints := make(containerIPList, 0)
+	ips := make(networkIPMap)
 	for _, n := range group.deployment.networks {
 		if n.mode == networkModeBridge {
 			for _, c := range n.bridgeModeConfig.Containers {
 				if c.Container.Group == gName && c.Container.Container == cName {
-					networkEndpoints = append(networkEndpoints, newBridgeModeContainerIP(n, c.IP))
+					ips[n.Name()] = newBridgeModeContainerIP(n, c.IP)
 					break
 				}
 			}
 		} else if n.mode == networkModeContainer {
 			for _, c := range n.containerModeConfig.Containers {
 				if c.Group == gName && c.Container == cName {
-					networkEndpoints = append(networkEndpoints, newContainerModeContainerIP(n))
+					ips[n.Name()] = newContainerModeContainerIP(n)
 					break
 				}
 			}
 		}
 	}
-	c.networkEndpoints = networkEndpoints
+	c.ips = ips
 	return &c
 }
 
-func (c *container) String() string {
-	return fmt.Sprintf("Container{Group:%s Name:%s}", c.group.config.Name, c.config.Name)
+func (c *container) Name() string {
+	return containerName(c.group.Name(), c.config.Name)
 }
 
-func (c containerList) String() string {
-	var sb strings.Builder
-	sb.WriteString("[")
-	if len(c) > 0 {
-		sb.WriteString(c[0].String())
-	} else {
-		sb.WriteString("empty")
-	}
-	for i := 1; i < len(c); i++ {
-		sb.WriteString(fmt.Sprintf(", %s", c[i]))
-	}
-	sb.WriteString("]")
-	return sb.String()
+func (c *container) String() string {
+	return fmt.Sprintf("Container{Name:%s}", c.Name())
+}
+
+func (c containerMap) String() string {
+	return stringifyMap(c)
 }
 
 func newBridgeModeNetwork(dep *deployment, config *BridgeModeNetworkConfig) *network {
@@ -215,27 +209,32 @@ func newContainerModeNetwork(dep *deployment, config *ContainerModeNetworkConfig
 	return &n
 }
 
-func (n *network) String() string {
+func (n *network) Name() string {
 	if n.mode == networkModeBridge {
-		return fmt.Sprintf("{Network (Bridge) Name: %s}", n.bridgeModeConfig.Name)
+		return n.bridgeModeConfig.Name
 	} else if n.mode == networkModeContainer {
-		return fmt.Sprintf("{Network (Container) Name: %s}", n.containerModeConfig.Name)
+		return n.containerModeConfig.Name
 	} else {
+		log.Fatalf("unknown network, possibly indicating a bug in the code!")
 		return "{Network Unknown}"
 	}
 }
 
-func (n networkList) String() string {
-	var sb strings.Builder
-	sb.WriteString("[")
-	if len(n) > 0 {
-		sb.WriteString(n[0].String())
+func (n *network) String() string {
+	if n.mode == networkModeBridge {
+		return fmt.Sprintf("{Network (Bridge) Name: %s}", n.Name())
+	} else if n.mode == networkModeContainer {
+		return fmt.Sprintf("{Network (Container) Name: %s}", n.Name())
 	} else {
-		sb.WriteString("empty")
+		log.Fatalf("unknown network, possibly indicating a bug in the code!")
+		return "{Network Unknown}"
 	}
-	for i := 1; i < len(n); i++ {
-		sb.WriteString(fmt.Sprintf(", %s", n[i]))
-	}
-	sb.WriteString("]")
-	return sb.String()
+}
+
+func (n networkMap) String() string {
+	return stringifyMap(n)
+}
+
+func containerName(group string, container string) string {
+	return fmt.Sprintf("%s-%s", group, container)
 }
