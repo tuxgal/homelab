@@ -31,10 +31,15 @@ type cmd interface {
 
 func handleSubCommand() error {
 	args := flag.Args()
+	if len(args) == 0 {
+		// TODO: Print the homelab usage for this case.
+		return fmt.Errorf("need to specify a sub-command")
+	}
+
 	subCmd := args[0]
 	handler, ok := cmdHandlers[subCmd]
 	if !ok {
-		return fmt.Errorf("Invalid command: %s", subCmd)
+		return fmt.Errorf("invalid command: %s", subCmd)
 	}
 
 	// Configure flags for the sub-command and parse the command
