@@ -6,7 +6,7 @@ import (
 
 type startCmdHandler struct {
 	cgFlags containerAndGroupFlags
-	config  HomelabConfig
+	dep     *deployment
 }
 
 func newStartCmdHandler() *startCmdHandler {
@@ -18,10 +18,12 @@ func (s *startCmdHandler) updateFlagSet(fs *flag.FlagSet) {
 }
 
 func (s *startCmdHandler) run() error {
-	err := parseHomelabConfig(&s.config)
+	c := HomelabConfig{}
+	err := parseHomelabConfig(&c)
 	if err != nil {
 		return err
 	}
+	s.dep = newDeployment(&c)
 
 	log.Infof("allGroups: %t", s.cgFlags.allGroups)
 	log.Infof("group: %s", s.cgFlags.group)
@@ -40,11 +42,18 @@ func (s *startCmdHandler) run() error {
 	// 6. Create the container.
 	// 7. Start the container.
 
-	_, _ = containersForCmd(&s.config, s.cgFlags.allGroups, s.cgFlags.group, s.cgFlags.container)
+	var containers containerList
+	if s.cgFlags.allGroups {
+		containers = s.dep.queryAllContainers()
+	} else if s.cgFlags.group != "" {
+		if s.cgFlags.container == "" {
+			containers = s.dep.queryAllContainersInGroup(s.cgFlags.group)
+		} else {
+			containers = append(containers, s.dep.queryContainer(s.cgFlags.group, s.cgFlags.container))
+		}
+	}
+
+	log.Infof("Result containers =\n%s", containers)
 
 	return nil
-}
-
-func containersForCmd(config *HomelabConfig, allGroups bool, group string, container string) ([]ContainerConfig, error) {
-	return nil, nil
 }

@@ -43,29 +43,30 @@ type EnvConfig struct {
 // IPAMConfig represents the IP Addressing and management information for
 // all containers in the homelab configuration.
 type IPAMConfig struct {
-	Networks    NetworksConfig      `yaml:"networks"`
-	PrimaryIP   []ContainerIPConfig `yaml:"primaryIp"`
-	SecondaryIP []SecondaryIPConfig `yaml:"secondaryIp"`
+	Networks NetworksConfig `yaml:"networks"`
 }
 
 // NetworksConfig represents all networks in the homelab configuration.
 type NetworksConfig struct {
-	BridgeModeNetworks []BridgeModeNetworkConfig    `yaml:"standardNetworks"`
-	ContainerNetworks  []ContainerModeNetworkConfig `yaml:"containerNetworks"`
+	BridgeModeNetworks    []BridgeModeNetworkConfig    `yaml:"bridgeModeNetworks"`
+	ContainerModeNetworks []ContainerModeNetworkConfig `yaml:"containerModeNetworks"`
 }
 
 // BridgeModeNetworkConfig represents a docker bridge mode network that one
 // or more containers attach to.
 type BridgeModeNetworkConfig struct {
-	Name              string `yaml:"name"`
-	HostInterfaceName string `yaml:"hostInterfaceName"`
-	Cidr              string `yaml:"cidr"`
+	Name              string              `yaml:"name"`
+	HostInterfaceName string              `yaml:"hostInterfaceName"`
+	Cidr              string              `yaml:"cidr"`
+	Priority          int                 `yaml:"priority"`
+	Containers        []ContainerIPConfig `yaml:"containers"`
 }
 
 // ContainerModeNetworkConfig represents a container network meant to attach a
 // container to another container's network stack.
 type ContainerModeNetworkConfig struct {
 	Name       string               `yaml:"name"`
+	Priority   int                  `yaml:"priority"`
 	Containers []ContainerReference `yaml:"containers"`
 }
 
@@ -73,13 +74,6 @@ type ContainerModeNetworkConfig struct {
 type ContainerIPConfig struct {
 	IP        string             `yaml:"ip"`
 	Container ContainerReference `yaml:"container"`
-}
-
-// SecondaryIP represents the secondary IP information for all
-// containers in the homelab configuration.
-type SecondaryIPConfig struct {
-	Network string              `yaml:"network"`
-	Ips     []ContainerIPConfig `yaml:"ips"`
 }
 
 // HostConfig represents the host specific information.
