@@ -38,20 +38,6 @@ func (s *startCmdHandler) run(options *cmdOptions) error {
 	// 6. Create the container.
 	// 7. Start the container.
 
-	var containers containerList
-	if options.containerAndGroup.allGroups {
-		containers = s.dep.queryAllContainers()
-	} else if options.containerAndGroup.group != "" && options.containerAndGroup.container == "" {
-		containers = s.dep.queryAllContainersInGroup(options.containerAndGroup.group)
-	} else if options.containerAndGroup.group != "" {
-		c := s.dep.queryContainer(options.containerAndGroup.group, options.containerAndGroup.container)
-		if c != nil {
-			containers = append(containers, c)
-		}
-	} else {
-		log.Fatalf("Invalid scenario, possibly indicating a bug in the code")
-	}
-
-	log.Infof("Result containers =\n%s", containers)
+	log.Infof("Result containers =\n%s", queryContainers(s.dep, options))
 	return nil
 }
