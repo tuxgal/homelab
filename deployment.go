@@ -2,12 +2,23 @@ package main
 
 import (
 	"fmt"
+	"net"
+	"os"
+	"runtime"
+	"strings"
+)
+
+const (
+	osLinux   = "linux"
+	archAmd64 = "amd64"
+	archArm64 = "arm64"
 )
 
 type deployment struct {
 	config   *HomelabConfig
 	groups   containerGroupMap
 	networks networkMap
+	host     hostInfo
 }
 
 type containerGroup struct {
@@ -42,6 +53,17 @@ type network struct {
 	containerModeConfig *ContainerModeNetworkConfig
 }
 
+type hostInfo struct {
+	numCPUs               int
+	os                    string
+	arch                  string
+	dockerPlatform        string
+	hostName              string
+	humanFriendlyHostName string
+	ip                    net.IP
+	config                []*HostConfig
+}
+
 type containerGroupMap map[string]*containerGroup
 type containerMap map[string]*container
 type containerList []*container
@@ -61,25 +83,71 @@ func newDeployment(config *HomelabConfig) *deployment {
 
 	// First build the networks as it will be looked up while building
 	// the container groups and containers within.
+	d.populateNetworks()
+	d.populateGroups()
+	d.populateHostInfo()
+	return &d
+}
+
+func (d *deployment) populateNetworks() {
 	networks := make(networkMap)
-	for _, n := range config.IPAM.Networks.BridgeModeNetworks {
-		nt := newBridgeModeNetwork(&d, &n)
+	for _, n := range d.config.IPAM.Networks.BridgeModeNetworks {
+		nt := newBridgeModeNetwork(d, &n)
 		networks[nt.Name()] = nt
 	}
-	for _, n := range config.IPAM.Networks.ContainerModeNetworks {
-		nt := newContainerModeNetwork(&d, &n)
+	for _, n := range d.config.IPAM.Networks.ContainerModeNetworks {
+		nt := newContainerModeNetwork(d, &n)
 		networks[nt.Name()] = nt
 	}
 	d.networks = networks
+}
 
+func (d *deployment) populateGroups() {
 	groups := make(containerGroupMap)
-	for _, g := range config.Groups {
-		cg := newContainerGroup(&d, &g, &config.Containers)
+	for _, g := range d.config.Groups {
+		cg := newContainerGroup(d, &g, &d.config.Containers)
 		groups[cg.Name()] = cg
 	}
 	d.groups = groups
+}
 
-	return &d
+func (d *deployment) populateHostInfo() {
+	d.host.numCPUs = runtime.NumCPU()
+	d.host.os = runtime.GOOS
+	d.host.arch = runtime.GOARCH
+	d.host.dockerPlatform = archToDockerPlatform(d.host.arch)
+	log.Debugf("Num CPUs = %d", d.host.numCPUs)
+	log.Debugf("OS = %s", d.host.os)
+	log.Debugf("Arch = %s", d.host.arch)
+	log.Debugf("Docker Platform = %s", d.host.dockerPlatform)
+	if d.host.os != osLinux {
+		log.Fatalf("Only linux OS is supported, found OS: %s", d.host.os)
+	}
+	if d.host.arch != archAmd64 && d.host.arch != archArm64 {
+		log.Fatalf("Only amd64 and arm64 platforms are supported, found Arch: %s", d.host.arch)
+	}
+
+	hostName, err := os.Hostname()
+	if err != nil {
+		log.Fatalf("Unable to determine the current machine's host name, %v", err)
+	}
+	d.host.humanFriendlyHostName = hostName
+	d.host.hostName = strings.ToLower(d.host.humanFriendlyHostName)
+
+	conn, err := net.Dial("udp", "10.1.1.1:1234")
+	if err != nil {
+		log.Fatalf("Unable to determine the current machine's IP, %v", err)
+	}
+	defer conn.Close()
+	d.host.ip = conn.LocalAddr().(*net.UDPAddr).IP
+
+	for _, h := range d.config.Hosts {
+		d.host.config = append(d.host.config, &h)
+	}
+
+	log.Debugf("Host name: %s", d.host.hostName)
+	log.Debugf("Human Friendly Host name: %s", d.host.humanFriendlyHostName)
+	log.Debugf("Host IP: %s", d.host.ip)
 }
 
 func (d *deployment) queryAllContainers() containerMap {
@@ -238,4 +306,15 @@ func (n networkMap) String() string {
 
 func containerName(group string, container string) string {
 	return fmt.Sprintf("%s-%s", group, container)
+}
+
+func archToDockerPlatform(arch string) string {
+	switch arch {
+	case archAmd64:
+		return "linux/amd64"
+	case archArm64:
+		return "linux/arm64/v8"
+	default:
+		return fmt.Sprintf("unsupported-docker-arch-%s", arch)
+	}
 }
