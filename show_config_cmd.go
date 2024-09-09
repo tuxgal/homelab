@@ -1,19 +1,16 @@
 package main
 
-import (
-	"flag"
-)
-
 type showConfigCmdHandler struct{}
 
 func newShowConfigCmdHandler() *showConfigCmdHandler {
 	return &showConfigCmdHandler{}
 }
 
-func (s *showConfigCmdHandler) updateFlagSet(fs *flag.FlagSet) {
+func (s *showConfigCmdHandler) containerAndGroupFlags() bool {
+	return false
 }
 
-func (s *showConfigCmdHandler) run() error {
+func (s *showConfigCmdHandler) run(options *cmdOptions) error {
 	config := HomelabConfig{}
 	err := parseHomelabConfig(&config)
 	if err != nil {

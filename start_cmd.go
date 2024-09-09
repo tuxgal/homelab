@@ -1,33 +1,29 @@
 package main
 
-import (
-	"flag"
-)
-
 type startCmdHandler struct {
-	cgFlags containerAndGroupFlags
-	dep     *deployment
+	dep *deployment
 }
 
 func newStartCmdHandler() *startCmdHandler {
 	return &startCmdHandler{}
 }
 
-func (s *startCmdHandler) updateFlagSet(fs *flag.FlagSet) {
-	addContainerAndGroupFlags(fs, &s.cgFlags)
+func (s *startCmdHandler) containerAndGroupFlags() bool {
+	return true
 }
 
-func (s *startCmdHandler) run() error {
+func (s *startCmdHandler) run(options *cmdOptions) error {
+	err := validateContainerAndGroupFlags(&options.containerAndGroup)
+	if err != nil {
+		return err
+	}
+
 	c := HomelabConfig{}
-	err := parseHomelabConfig(&c)
+	err = parseHomelabConfig(&c)
 	if err != nil {
 		return err
 	}
 	s.dep = newDeployment(&c)
-
-	log.Infof("allGroups: %t", s.cgFlags.allGroups)
-	log.Infof("group: %s", s.cgFlags.group)
-	log.Infof("container: %s", s.cgFlags.container)
 
 	// Identify the containers that are in scope for this command invocation.
 	// Run start() against each of those containers.
@@ -43,14 +39,17 @@ func (s *startCmdHandler) run() error {
 	// 7. Start the container.
 
 	var containers containerList
-	if s.cgFlags.allGroups {
+	if options.containerAndGroup.allGroups {
 		containers = s.dep.queryAllContainers()
-	} else if s.cgFlags.group != "" {
-		if s.cgFlags.container == "" {
-			containers = s.dep.queryAllContainersInGroup(s.cgFlags.group)
-		} else {
-			containers = append(containers, s.dep.queryContainer(s.cgFlags.group, s.cgFlags.container))
+	} else if options.containerAndGroup.group != "" && options.containerAndGroup.container == "" {
+		containers = s.dep.queryAllContainersInGroup(options.containerAndGroup.group)
+	} else if options.containerAndGroup.group != "" {
+		c := s.dep.queryContainer(options.containerAndGroup.group, options.containerAndGroup.container)
+		if c != nil {
+			containers = append(containers, c)
 		}
+	} else {
+		log.Fatalf("Invalid scenario, possibly indicating a bug in the code")
 	}
 
 	log.Infof("Result containers =\n%s", containers)
