@@ -179,7 +179,7 @@ func newContainer(group *containerGroup, config *ContainerConfig) *container {
 }
 
 func (c *container) String() string {
-	return fmt.Sprintf("Container{Name:%s}", c.config.Name)
+	return fmt.Sprintf("Container{Group:%s Name:%s}", c.group.config.Name, c.config.Name)
 }
 
 func (c containerList) String() string {
