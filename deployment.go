@@ -44,6 +44,7 @@ type network struct {
 
 type containerGroupMap map[string]*containerGroup
 type containerMap map[string]*container
+type containerList []*container
 type networkMap map[string]*network
 type networkIPMap map[string]*containerIP
 
