@@ -43,14 +43,14 @@ func (s *startCmdHandler) run(options *cmdOptions) error {
 		if c.isAllowedOnCurrentHost() {
 			err := c.start()
 			if err != nil {
-				log.Errorf("Failed to start container '%s', reason:\n%v", c.Name(), err)
+				log.Errorf("Failed to start container '%s', reason:\n%v", c.name(), err)
 				log.ErrorEmpty()
 			} else {
-				log.Infof("Started container %s", c.Name())
+				log.Infof("Started container %s", c.name())
 				log.InfoEmpty()
 			}
 		} else {
-			log.Warnf("Container %s not allowed to run on host '%s'", c.Name(), s.dep.host.humanFriendlyHostName)
+			log.Warnf("Container %s not allowed to run on host '%s'", c.name(), s.dep.host.humanFriendlyHostName)
 		}
 	}
 
