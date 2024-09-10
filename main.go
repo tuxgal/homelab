@@ -24,10 +24,13 @@ func buildLogger() zzzlogi.Logger {
 	envLogLevel, isEnvVarSet := os.LookupEnv(logLevelEnvVar)
 	if isEnvVarSet && envLogLevel == "trace" {
 		config.MaxLevel = zzzlog.LvlTrace
+		config.SkipCallerInfo = false
 	} else if isEnvVarSet && envLogLevel == "debug" {
 		config.MaxLevel = zzzlog.LvlDebug
+		config.SkipCallerInfo = false
 	} else {
 		config.MaxLevel = zzzlog.LvlInfo
+		config.SkipCallerInfo = true
 	}
 	return zzzlog.NewLogger(config)
 }
