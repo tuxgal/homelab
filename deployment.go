@@ -269,6 +269,10 @@ func (c *container) isAllowedOnCurrentHost() bool {
 	return c.group.deployment.host.allowedContainers[c.Name()]
 }
 
+func (c *container) start() error {
+	return fmt.Errorf("container start is not yet supported")
+}
+
 func (c *container) Name() string {
 	return containerName(c.group.Name(), c.config.Name)
 }

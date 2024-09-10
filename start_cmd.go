@@ -38,9 +38,20 @@ func (s *startCmdHandler) run(options *cmdOptions) error {
 
 	res := queryContainers(s.dep, options)
 
-	log.Infof("Result containers =\n%s", res)
+	log.Debugf("Result containers =\n%s", res)
 	for _, c := range res {
-		log.Infof("%s IsAllowed on host: %t", c, c.isAllowedOnCurrentHost())
+		if c.isAllowedOnCurrentHost() {
+			err := c.start()
+			if err != nil {
+				log.Errorf("Failed to start container '%s', reason:\n%v", c.Name(), err)
+				log.ErrorEmpty()
+			} else {
+				log.Infof("Started container %s", c.Name())
+				log.InfoEmpty()
+			}
+		} else {
+			log.Warnf("Container %s not allowed to run on host '%s'", c.Name(), s.dep.host.humanFriendlyHostName)
+		}
 	}
 
 	return nil
