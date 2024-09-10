@@ -12,7 +12,7 @@ func (s *showConfigCmdHandler) containerAndGroupFlags() bool {
 
 func (s *showConfigCmdHandler) run(options *cmdOptions) error {
 	config := HomelabConfig{}
-	err := parseHomelabConfig(&config)
+	err := config.parse()
 	if err != nil {
 		return err
 	}

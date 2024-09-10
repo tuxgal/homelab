@@ -81,7 +81,6 @@ type ContainerIPConfig struct {
 // HostConfig represents the host specific information.
 type HostConfig struct {
 	Name              string               `yaml:"name"`
-	HumanFriendlyName string               `yaml:"humanFriendlyName"`
 	AllowedContainers []ContainerReference `yaml:"allowedContainers"`
 }
 
@@ -214,7 +213,19 @@ func mergedConfigReader(path string) (io.Reader, error) {
 	return bytes.NewReader(result), nil
 }
 
-func parseHomelabConfig(config *HomelabConfig) error {
+func (h *HomelabConfig) parseUsingReader(s io.Reader) error {
+	dec := yaml.NewDecoder(s)
+	dec.KnownFields(true)
+	err := dec.Decode(h)
+	if err != nil {
+		return fmt.Errorf("failed to parse homelab config, reason: %w", err)
+	}
+
+	log.Tracef("Homelab Config:\n%v\n", prettyPrintJSON(h))
+	return nil
+}
+
+func (h *HomelabConfig) parse() error {
 	path, err := homelabConfigsPath()
 	if err != nil {
 		return err
@@ -228,18 +239,51 @@ func parseHomelabConfig(config *HomelabConfig) error {
 		return fmt.Errorf("homelab configs path %q must be a directory", path)
 	}
 
-	configFile, err := mergedConfigReader(path)
+	m, err := mergedConfigReader(path)
 	if err != nil {
 		return err
 	}
 
-	dec := yaml.NewDecoder(configFile)
-	dec.KnownFields(true)
-	err = dec.Decode(&config)
-	if err != nil {
-		return fmt.Errorf("failed to parse homelab config, reason: %w", err)
-	}
+	return h.parseUsingReader(m)
+}
 
-	log.Tracef("Homelab Config:\n%v\n", prettyPrintJSON(config))
+func (h *HomelabConfig) validate() error {
+	// TODO: Perform the following (and more) validations:
+	// 1. Validate global config:
+	//     a. No duplicate global config env names.
+	//     b. Validate mandatory properties of every global config env.
+	//     c. Every global config env specifies exactly one of value or
+	//        valueCommand, but not both.
+	//     d. Validate mandatory properties of every global config volume.
+	//     e. No duplicate global config volume names.
+	// 2. Validate hosts config:
+	//     a. No duplicate host names.
+	//     b. No duplicate allowed containers (i.e. combination of group
+	//        and container name).
+	// 3. Validate IPAM config:
+	//     a. No duplicate network names across bridge and container mode
+	//        networks.
+	//     b. No duplicate host interface names across bridge networks.
+	//     c. No overlapping CIDR across networks.
+	//     d. No duplicate container names within a bridge or container
+	//        mode network.
+	//     e. All IPs in a bridge network belong to the CIDR.
+	//     f. No duplicate IPs within a bridge network.
+	// 4. Groups config:
+	//     a. No duplicate group names.
+	//     b. Order defined for all the groups.
+	// 5. Container configs:
+	//     a. Parent group name is a valid group defined under group config.
+	//     b. No duplicate container names within the same group.
+	//     c. Order defined for all the containers.
+	//     d. Image defined for all the containers.
+	//     e. Validate mandatory properties of every device config.
+	//     f. Validate manadatory properties of every container config volume.
+	//     g. Volume pure name references are valid global config volume references.
+	//     h. Validate manadatory properties of every container config env.
+	//     i. Every container config env specifies exactly one of value or
+	//        valueCommand, but not both.
+	//     j. Validate mandatory properties of every published port config.
+	//     k. Validate mandatory properties of every label config.
 	return nil
 }

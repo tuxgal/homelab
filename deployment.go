@@ -61,7 +61,8 @@ type hostInfo struct {
 	hostName              string
 	humanFriendlyHostName string
 	ip                    net.IP
-	config                []*HostConfig
+	allowedContainers     stringSet
+	config                *HostConfig
 }
 
 type containerGroupMap map[string]*containerGroup
@@ -69,13 +70,21 @@ type containerMap map[string]*container
 type containerList []*container
 type networkMap map[string]*network
 type networkIPMap map[string]*containerIP
+type stringSet map[string]bool
 
-func newBridgeModeContainerIP(network *network, ip string) *containerIP {
-	return &containerIP{network: network, IP: ip}
-}
+func buildDeployment() (*deployment, error) {
+	c := HomelabConfig{}
+	err := c.parse()
+	if err != nil {
+		return nil, err
+	}
 
-func newContainerModeContainerIP(network *network) *containerIP {
-	return &containerIP{network: network}
+	err = c.validate()
+	if err != nil {
+		return nil, err
+	}
+
+	return newDeployment(&c), nil
 }
 
 func newDeployment(config *HomelabConfig) *deployment {
@@ -141,13 +150,21 @@ func (d *deployment) populateHostInfo() {
 	defer conn.Close()
 	d.host.ip = conn.LocalAddr().(*net.UDPAddr).IP
 
+	d.host.allowedContainers = make(stringSet)
 	for _, h := range d.config.Hosts {
-		d.host.config = append(d.host.config, &h)
+		if h.Name == d.host.hostName {
+			d.host.config = &h
+			for _, c := range d.host.config.AllowedContainers {
+				d.host.allowedContainers[containerName(c.Group, c.Container)] = true
+			}
+			break
+		}
 	}
 
 	log.Debugf("Host name: %s", d.host.hostName)
 	log.Debugf("Human Friendly Host name: %s", d.host.humanFriendlyHostName)
 	log.Debugf("Host IP: %s", d.host.ip)
+	log.Debugf("Allowed Containers: %s", d.host.allowedContainers)
 }
 
 func (d *deployment) queryAllContainers() containerMap {
@@ -248,6 +265,10 @@ func newContainer(group *containerGroup, config *ContainerConfig) *container {
 	return &c
 }
 
+func (c *container) isAllowedOnCurrentHost() bool {
+	return c.group.deployment.host.allowedContainers[c.Name()]
+}
+
 func (c *container) Name() string {
 	return containerName(c.group.Name(), c.config.Name)
 }
@@ -302,6 +323,14 @@ func (n *network) String() string {
 
 func (n networkMap) String() string {
 	return stringifyMap(n)
+}
+
+func newBridgeModeContainerIP(network *network, ip string) *containerIP {
+	return &containerIP{network: network, IP: ip}
+}
+
+func newContainerModeContainerIP(network *network) *containerIP {
+	return &containerIP{network: network}
 }
 
 func containerName(group string, container string) string {

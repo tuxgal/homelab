@@ -18,12 +18,10 @@ func (s *startCmdHandler) run(options *cmdOptions) error {
 		return err
 	}
 
-	c := HomelabConfig{}
-	err = parseHomelabConfig(&c)
+	s.dep, err = buildDeployment()
 	if err != nil {
 		return err
 	}
-	s.dep = newDeployment(&c)
 
 	// Identify the containers that are in scope for this command invocation.
 	// Run start() against each of those containers.
@@ -38,6 +36,12 @@ func (s *startCmdHandler) run(options *cmdOptions) error {
 	// 6. Create the container.
 	// 7. Start the container.
 
-	log.Infof("Result containers =\n%s", queryContainers(s.dep, options))
+	res := queryContainers(s.dep, options)
+
+	log.Infof("Result containers =\n%s", res)
+	for _, c := range res {
+		log.Infof("%s IsAllowed on host: %t", c, c.isAllowedOnCurrentHost())
+	}
+
 	return nil
 }
