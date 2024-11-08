@@ -7,9 +7,9 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/config/env"
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/cmdexec"
+	"github.com/tuxgal/homelab/internal/config/env"
+	"github.com/tuxgal/homelab/internal/utils"
 	"gopkg.in/yaml.v3"
 )
 

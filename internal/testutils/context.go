@@ -3,23 +3,23 @@ package testutils
 import (
 	"context"
 
-	"github.com/tuxdude/zzzlogi"
-	"github.com/tuxdudehomelab/homelab/internal/cli/version"
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec/fakecmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/docker"
-	"github.com/tuxdudehomelab/homelab/internal/docker/fakedocker"
-	"github.com/tuxdudehomelab/homelab/internal/host"
-	"github.com/tuxdudehomelab/homelab/internal/host/fakehost"
-	"github.com/tuxdudehomelab/homelab/internal/inspect"
-	"github.com/tuxdudehomelab/homelab/internal/log"
-	"github.com/tuxdudehomelab/homelab/internal/user"
-	"github.com/tuxdudehomelab/homelab/internal/user/fakeuser"
+	"github.com/tuxgal/homelab/internal/cli/version"
+	"github.com/tuxgal/homelab/internal/cmdexec"
+	"github.com/tuxgal/homelab/internal/cmdexec/fakecmdexec"
+	"github.com/tuxgal/homelab/internal/docker"
+	"github.com/tuxgal/homelab/internal/docker/fakedocker"
+	"github.com/tuxgal/homelab/internal/host"
+	"github.com/tuxgal/homelab/internal/host/fakehost"
+	"github.com/tuxgal/homelab/internal/inspect"
+	"github.com/tuxgal/homelab/internal/log"
+	"github.com/tuxgal/homelab/internal/user"
+	"github.com/tuxgal/homelab/internal/user/fakeuser"
+	"github.com/tuxgal/tuxlogi"
 )
 
 type TestContextInfo struct {
 	InspectLevel               inspect.HomelabInspectLevel
-	Logger                     zzzlogi.Logger
+	Logger                     tuxlogi.Logger
 	Version                    *version.VersionInfo
 	Executor                   cmdexec.Executor
 	DockerHost                 docker.APIClient

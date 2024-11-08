@@ -3,7 +3,7 @@ package fakehost
 import (
 	"net/netip"
 
-	"github.com/tuxdudehomelab/homelab/internal/host"
+	"github.com/tuxgal/homelab/internal/host"
 )
 
 const (

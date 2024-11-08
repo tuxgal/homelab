@@ -14,8 +14,8 @@ import (
 	dnetwork "github.com/docker/docker/api/types/network"
 	dclient "github.com/docker/docker/client"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
-	"github.com/tuxdudehomelab/homelab/internal/host"
-	"github.com/tuxdudehomelab/homelab/internal/inspect"
+	"github.com/tuxgal/homelab/internal/host"
+	"github.com/tuxgal/homelab/internal/inspect"
 
 	"golang.org/x/sys/unix"
 

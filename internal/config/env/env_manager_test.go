@@ -5,10 +5,10 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/tuxdude/zzzlog"
-	logger "github.com/tuxdudehomelab/homelab/internal/log"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
-	"github.com/tuxdudehomelab/homelab/internal/testutils"
+	logger "github.com/tuxgal/homelab/internal/log"
+	"github.com/tuxgal/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testutils"
+	"github.com/tuxgal/tuxlog"
 )
 
 var systemConfigEnvManagerApplyTests = []struct {
@@ -66,7 +66,7 @@ func TestSystemConfigEnvManagerApply(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			l := testutils.NewCapturingTestLogger(zzzlog.LvlInfo, new(bytes.Buffer))
+			l := testutils.NewCapturingTestLogger(tuxlog.LvlInfo, new(bytes.Buffer))
 			ctx := testutils.NewTestContext(&testutils.TestContextInfo{})
 			ctx = logger.WithLogger(ctx, l)
 
@@ -203,7 +203,7 @@ func TestGlobalConfigEnvManagerApply(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			l := testutils.NewCapturingTestLogger(zzzlog.LvlInfo, new(bytes.Buffer))
+			l := testutils.NewCapturingTestLogger(tuxlog.LvlInfo, new(bytes.Buffer))
 			ctx := testutils.NewTestContext(&testutils.TestContextInfo{})
 			ctx = logger.WithLogger(ctx, l)
 
@@ -511,7 +511,7 @@ func TestContainerConfigEnvManagerApply(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			l := testutils.NewCapturingTestLogger(zzzlog.LvlInfo, new(bytes.Buffer))
+			l := testutils.NewCapturingTestLogger(tuxlog.LvlInfo, new(bytes.Buffer))
 			ctx := testutils.NewTestContext(&testutils.TestContextInfo{})
 			ctx = logger.WithLogger(ctx, l)
 

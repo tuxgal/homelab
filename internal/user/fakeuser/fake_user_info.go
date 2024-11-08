@@ -3,7 +3,7 @@ package fakeuser
 import (
 	osuser "os/user"
 
-	"github.com/tuxdudehomelab/homelab/internal/user"
+	"github.com/tuxgal/homelab/internal/user"
 )
 
 const (

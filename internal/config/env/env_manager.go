@@ -4,8 +4,8 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/tuxdudehomelab/homelab/internal/host"
-	"github.com/tuxdudehomelab/homelab/internal/user"
+	"github.com/tuxgal/homelab/internal/host"
+	"github.com/tuxgal/homelab/internal/user"
 )
 
 var (

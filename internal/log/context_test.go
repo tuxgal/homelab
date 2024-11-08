@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testhelpers"
 )
 
 func TestRetrieveLoggerFromEmptyContext(t *testing.T) {

@@ -4,7 +4,7 @@ import (
 	"context"
 	"fmt"
 
-	"github.com/tuxdudehomelab/homelab/internal/deployment"
+	"github.com/tuxgal/homelab/internal/deployment"
 )
 
 func BuildDeployment(ctx context.Context, cmd string, opts *GlobalCmdOptions) (*deployment.Deployment, error) {

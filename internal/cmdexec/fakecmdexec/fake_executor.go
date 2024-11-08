@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec"
+	"github.com/tuxgal/homelab/internal/cmdexec"
 )
 
 type FakeExecutor struct {

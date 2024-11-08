@@ -5,14 +5,14 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/tuxdude/zzzlog"
-	"github.com/tuxdudehomelab/homelab/internal/cli/version"
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec/fakecmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/docker"
-	"github.com/tuxdudehomelab/homelab/internal/docker/fakedocker"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
-	"github.com/tuxdudehomelab/homelab/internal/testutils"
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/cli/version"
+	"github.com/tuxgal/homelab/internal/cmdexec/fakecmdexec"
+	"github.com/tuxgal/homelab/internal/docker"
+	"github.com/tuxgal/homelab/internal/docker/fakedocker"
+	"github.com/tuxgal/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testutils"
+	"github.com/tuxgal/homelab/internal/utils"
+	"github.com/tuxgal/tuxlog"
 )
 
 var executeHomelabCmdTests = []struct {
@@ -946,13 +946,13 @@ func TestExecHomelabCmdRealEverything(t *testing.T) {
 	}
 }
 
-var executeHomelabCmdLogLevels = []zzzlog.Level{
-	zzzlog.LvlTrace,
-	zzzlog.LvlDebug,
-	zzzlog.LvlInfo,
-	zzzlog.LvlWarn,
-	zzzlog.LvlError,
-	zzzlog.LvlFatal,
+var executeHomelabCmdLogLevels = []tuxlog.Level{
+	tuxlog.LvlTrace,
+	tuxlog.LvlDebug,
+	tuxlog.LvlInfo,
+	tuxlog.LvlWarn,
+	tuxlog.LvlError,
+	tuxlog.LvlFatal,
 }
 
 var executeHomelabCmdLogLevelTests = []struct {
@@ -2579,13 +2579,13 @@ func TestExecHomelabNetworksCmdCompletions(t *testing.T) {
 	}
 }
 
-func execHomelabCmdTest(ctxInfo *testutils.TestContextInfo, logLevel *zzzlog.Level, args ...string) (fmt.Stringer, error) {
+func execHomelabCmdTest(ctxInfo *testutils.TestContextInfo, logLevel *tuxlog.Level, args ...string) (fmt.Stringer, error) {
 	buf := new(bytes.Buffer)
 	return execHomelabCmdTestWithBuf(ctxInfo, logLevel, buf, args...)
 }
 
-func execHomelabCmdTestWithBuf(ctxInfo *testutils.TestContextInfo, logLevel *zzzlog.Level, buf *bytes.Buffer, args ...string) (fmt.Stringer, error) {
-	lvl := zzzlog.LvlInfo
+func execHomelabCmdTestWithBuf(ctxInfo *testutils.TestContextInfo, logLevel *tuxlog.Level, buf *bytes.Buffer, args ...string) (fmt.Stringer, error) {
+	lvl := tuxlog.LvlInfo
 	if logLevel != nil {
 		lvl = *logLevel
 	}

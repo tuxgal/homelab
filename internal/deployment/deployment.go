@@ -7,8 +7,8 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/tuxdudehomelab/homelab/internal/config"
-	"github.com/tuxdudehomelab/homelab/internal/config/env"
+	"github.com/tuxgal/homelab/internal/config"
+	"github.com/tuxgal/homelab/internal/config/env"
 )
 
 type Deployment struct {

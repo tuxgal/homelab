@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/tuxdudehomelab/homelab/internal/newutils"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/newutils"
+	"github.com/tuxgal/homelab/internal/testhelpers"
 )
 
 var deepCopyTests = []struct {

@@ -5,10 +5,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/tuxdude/zzzlog"
-	logger "github.com/tuxdudehomelab/homelab/internal/log"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
-	"github.com/tuxdudehomelab/homelab/internal/testutils"
+	logger "github.com/tuxgal/homelab/internal/log"
+	"github.com/tuxgal/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testutils"
+	"github.com/tuxgal/tuxlog"
 )
 
 //nolint:thelper // The struct includes test (and not helper) code for each test case.
@@ -230,7 +230,7 @@ func TestConfigEnv(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			l := testutils.NewCapturingTestLogger(zzzlog.LvlInfo, new(bytes.Buffer))
+			l := testutils.NewCapturingTestLogger(tuxlog.LvlInfo, new(bytes.Buffer))
 			ctx := testutils.NewTestContext(&testutils.TestContextInfo{})
 			ctx = logger.WithLogger(ctx, l)
 
@@ -283,7 +283,7 @@ func TestConfigEnvInitPanic(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 
-			l := testutils.NewCapturingTestLogger(zzzlog.LvlInfo, new(bytes.Buffer))
+			l := testutils.NewCapturingTestLogger(tuxlog.LvlInfo, new(bytes.Buffer))
 			ctx := logger.WithLogger(context.Background(), l)
 
 			defer testhelpers.ExpectPanic(t, "newConfigEnv", tc.name, tc.want)

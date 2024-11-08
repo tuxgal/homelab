@@ -7,7 +7,7 @@ import (
 
 	"gopkg.in/yaml.v3"
 
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/utils"
 )
 
 type CLIConfig struct {

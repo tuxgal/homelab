@@ -12,10 +12,10 @@ import (
 	dmount "github.com/docker/docker/api/types/mount"
 	dnetwork "github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/config"
-	"github.com/tuxdudehomelab/homelab/internal/docker"
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/cmdexec"
+	"github.com/tuxgal/homelab/internal/config"
+	"github.com/tuxgal/homelab/internal/docker"
+	"github.com/tuxgal/homelab/internal/utils"
 )
 
 const (

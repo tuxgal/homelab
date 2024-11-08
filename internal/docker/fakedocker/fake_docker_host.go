@@ -8,8 +8,8 @@ import (
 	"io"
 
 	"github.com/sasha-s/go-deadlock"
-	"github.com/tuxdudehomelab/homelab/internal/docker"
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/docker"
+	"github.com/tuxgal/homelab/internal/utils"
 
 	dtypes "github.com/docker/docker/api/types"
 	dcontainer "github.com/docker/docker/api/types/container"

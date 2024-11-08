@@ -5,7 +5,7 @@ import (
 	"slices"
 
 	"github.com/spf13/cobra"
-	"github.com/tuxdudehomelab/homelab/internal/config"
+	"github.com/tuxgal/homelab/internal/config"
 )
 
 func AutoCompleteGroups(ctx context.Context, args []string, cmd string, opts *GlobalCmdOptions) ([]string, cobra.ShellCompDirective) {

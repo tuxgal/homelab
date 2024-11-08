@@ -3,30 +3,30 @@ package testutils
 import (
 	"io"
 
-	"github.com/tuxdude/zzzlog"
-	"github.com/tuxdude/zzzlogi"
+	"github.com/tuxgal/tuxlog"
+	"github.com/tuxgal/tuxlogi"
 )
 
-func NewTestLogger() zzzlogi.Logger {
-	config := zzzlog.NewConsoleLoggerConfig()
+func NewTestLogger() tuxlogi.Logger {
+	config := tuxlog.NewConsoleLoggerConfig()
 	config.SkipCallerInfo = true
 	config.PanicInFatal = true
-	return zzzlog.NewLogger(config)
+	return tuxlog.NewLogger(config)
 }
 
-func NewCapturingTestLogger(lvl zzzlog.Level, w io.Writer) zzzlogi.Logger {
-	config := zzzlog.NewConsoleLoggerConfig()
+func NewCapturingTestLogger(lvl tuxlog.Level, w io.Writer) tuxlogi.Logger {
+	config := tuxlog.NewConsoleLoggerConfig()
 	config.MaxLevel = lvl
 	config.SkipCallerInfo = true
 	config.PanicInFatal = true
 	config.Dest = w
-	return zzzlog.NewLogger(config)
+	return tuxlog.NewLogger(config)
 }
 
-func NewCapturingVanillaTestLogger(lvl zzzlog.Level, w io.Writer) zzzlogi.Logger {
-	config := zzzlog.NewVanillaLoggerConfig()
+func NewCapturingVanillaTestLogger(lvl tuxlog.Level, w io.Writer) tuxlogi.Logger {
+	config := tuxlog.NewVanillaLoggerConfig()
 	config.MaxLevel = lvl
 	config.Dest = w
 	config.PanicInFatal = true
-	return zzzlog.NewLogger(config)
+	return tuxlog.NewLogger(config)
 }

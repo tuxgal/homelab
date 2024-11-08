@@ -3,10 +3,10 @@ package clicontext
 import (
 	"context"
 
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/docker"
-	"github.com/tuxdudehomelab/homelab/internal/host"
-	"github.com/tuxdudehomelab/homelab/internal/user"
+	"github.com/tuxgal/homelab/internal/cmdexec"
+	"github.com/tuxgal/homelab/internal/docker"
+	"github.com/tuxgal/homelab/internal/host"
+	"github.com/tuxgal/homelab/internal/user"
 )
 
 func HomelabContext(ctx context.Context) context.Context {

@@ -3,7 +3,7 @@ package testhelpers
 import (
 	"os"
 
-	"github.com/tuxdude/zzzlog"
+	"github.com/tuxgal/tuxlog"
 )
 
 func HomelabBaseDir() string {
@@ -18,7 +18,7 @@ func Pwd() string {
 	return pwd
 }
 
-func NewLogLevel(lvl zzzlog.Level) *zzzlog.Level {
+func NewLogLevel(lvl tuxlog.Level) *tuxlog.Level {
 	return &lvl
 }
 

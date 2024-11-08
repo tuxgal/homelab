@@ -3,7 +3,7 @@ package containers
 import (
 	"testing"
 
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testhelpers"
 )
 
 var mustContainerNamePanicTests = []struct {

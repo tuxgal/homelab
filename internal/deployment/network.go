@@ -6,9 +6,9 @@ import (
 	"net/netip"
 
 	dnetwork "github.com/docker/docker/api/types/network"
-	"github.com/tuxdudehomelab/homelab/internal/config"
-	"github.com/tuxdudehomelab/homelab/internal/docker"
-	"github.com/tuxdudehomelab/homelab/internal/newutils"
+	"github.com/tuxgal/homelab/internal/config"
+	"github.com/tuxgal/homelab/internal/docker"
+	"github.com/tuxgal/homelab/internal/newutils"
 )
 
 type Network struct {

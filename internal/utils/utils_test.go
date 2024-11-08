@@ -3,7 +3,7 @@ package utils
 import (
 	"testing"
 
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testhelpers"
 )
 
 func TestMustParseDurationPanics(t *testing.T) {

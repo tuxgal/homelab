@@ -10,12 +10,12 @@ import (
 	"time"
 
 	"github.com/docker/go-units"
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/config"
-	"github.com/tuxdudehomelab/homelab/internal/config/env"
-	"github.com/tuxdudehomelab/homelab/internal/docker"
-	"github.com/tuxdudehomelab/homelab/internal/host"
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/cmdexec"
+	"github.com/tuxgal/homelab/internal/config"
+	"github.com/tuxgal/homelab/internal/config/env"
+	"github.com/tuxgal/homelab/internal/docker"
+	"github.com/tuxgal/homelab/internal/host"
+	"github.com/tuxgal/homelab/internal/utils"
 )
 
 func validateGlobalConfig(ctx context.Context, parentEnv *env.ConfigEnvManager, conf *config.Global) (*env.ConfigEnvManager, error) {

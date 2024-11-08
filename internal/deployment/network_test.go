@@ -3,8 +3,8 @@ package deployment
 import (
 	"testing"
 
-	"github.com/tuxdudehomelab/homelab/internal/config"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/config"
+	"github.com/tuxgal/homelab/internal/testhelpers"
 )
 
 func TestNetworkCreateOptionsPanics(t *testing.T) {

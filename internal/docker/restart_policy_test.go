@@ -3,7 +3,7 @@ package docker
 import (
 	"testing"
 
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testhelpers"
 )
 
 var mustRestartPolicyModeFromStringPanicTests = []struct {

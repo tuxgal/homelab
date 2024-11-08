@@ -6,9 +6,9 @@ import (
 	"io"
 
 	"github.com/spf13/cobra"
-	"github.com/tuxdudehomelab/homelab/internal/cli/clicommon"
-	"github.com/tuxdudehomelab/homelab/internal/cli/cmds"
-	"github.com/tuxdudehomelab/homelab/internal/cli/version"
+	"github.com/tuxgal/homelab/internal/cli/clicommon"
+	"github.com/tuxgal/homelab/internal/cli/cmds"
+	"github.com/tuxgal/homelab/internal/cli/version"
 )
 
 const (

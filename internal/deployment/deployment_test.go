@@ -9,12 +9,12 @@ import (
 	dmount "github.com/docker/docker/api/types/mount"
 	dnetwork "github.com/docker/docker/api/types/network"
 	"github.com/docker/go-connections/nat"
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec/fakecmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/config"
-	"github.com/tuxdudehomelab/homelab/internal/docker/fakedocker"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
-	"github.com/tuxdudehomelab/homelab/internal/testutils"
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/cmdexec/fakecmdexec"
+	"github.com/tuxgal/homelab/internal/config"
+	"github.com/tuxgal/homelab/internal/docker/fakedocker"
+	"github.com/tuxgal/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testutils"
+	"github.com/tuxgal/homelab/internal/utils"
 )
 
 var buildDeploymentUsingReaderTests = []struct {
@@ -201,7 +201,7 @@ containers:
         - var: MY_CT_PORT_2
           value: 8765
     image:
-      image: tuxdude/homelab-base:master
+      image: tuxgal/homelab-base:master
       skipImagePull: false
       ignoreImagePullFailures: true
       pullImageBeforeStop: true
@@ -719,7 +719,7 @@ ignore:
 						},
 					},
 					Image: config.ContainerImage{
-						Image:                   "tuxdude/homelab-base:master",
+						Image:                   "tuxgal/homelab-base:master",
 						SkipImagePull:           false,
 						IgnoreImagePullFailures: true,
 						PullImageBeforeStop:     true,
@@ -1052,7 +1052,7 @@ ignore:
 						StartInterval: utils.MustParseDuration("10s"),
 						Retries:       3,
 					},
-					Image: "tuxdude/homelab-base:master",
+					Image: "tuxgal/homelab-base:master",
 					Entrypoint: []string{
 						"my-custom-entrypoint",
 						"ep-arg1",

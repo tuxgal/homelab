@@ -6,11 +6,11 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/tuxdudehomelab/homelab/internal/docker/fakedocker"
-	"github.com/tuxdudehomelab/homelab/internal/inspect"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
-	"github.com/tuxdudehomelab/homelab/internal/testutils"
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/docker/fakedocker"
+	"github.com/tuxgal/homelab/internal/inspect"
+	"github.com/tuxgal/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testutils"
+	"github.com/tuxgal/homelab/internal/utils"
 )
 
 var mainRunWithContextTests = []struct {

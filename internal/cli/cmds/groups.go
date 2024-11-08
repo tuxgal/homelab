@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tuxdudehomelab/homelab/internal/cli/clicommon"
-	"github.com/tuxdudehomelab/homelab/internal/cli/cmds/groups"
+	"github.com/tuxgal/homelab/internal/cli/clicommon"
+	"github.com/tuxgal/homelab/internal/cli/cmds/groups"
 )
 
 func GroupsCmd(ctx context.Context, opts *clicommon.GlobalCmdOptions) *cobra.Command {

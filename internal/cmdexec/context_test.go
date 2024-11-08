@@ -5,10 +5,10 @@ import (
 	"context"
 	"testing"
 
-	"github.com/tuxdude/zzzlog"
-	"github.com/tuxdude/zzzlogi"
-	l "github.com/tuxdudehomelab/homelab/internal/log"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
+	l "github.com/tuxgal/homelab/internal/log"
+	"github.com/tuxgal/homelab/internal/testhelpers"
+	"github.com/tuxgal/tuxlog"
+	"github.com/tuxgal/tuxlogi"
 )
 
 func TestRetrieveExecutorFromEmptyContext(t *testing.T) {
@@ -28,10 +28,10 @@ func TestRetrieveExecutorFromEmptyContext(t *testing.T) {
 	})
 }
 
-func newTestLogger() zzzlogi.Logger {
-	config := zzzlog.NewConsoleLoggerConfig()
+func newTestLogger() tuxlogi.Logger {
+	config := tuxlog.NewConsoleLoggerConfig()
 	config.SkipCallerInfo = true
 	config.PanicInFatal = true
 	config.Dest = new(bytes.Buffer)
-	return zzzlog.NewLogger(config)
+	return tuxlog.NewLogger(config)
 }

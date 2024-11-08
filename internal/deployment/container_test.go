@@ -8,15 +8,15 @@ import (
 	"time"
 
 	dcontainer "github.com/docker/docker/api/types/container"
-	"github.com/tuxdude/zzzlog"
-	"github.com/tuxdudehomelab/homelab/internal/cmdexec/fakecmdexec"
-	"github.com/tuxdudehomelab/homelab/internal/config"
-	"github.com/tuxdudehomelab/homelab/internal/docker"
-	"github.com/tuxdudehomelab/homelab/internal/docker/fakedocker"
-	"github.com/tuxdudehomelab/homelab/internal/inspect"
-	"github.com/tuxdudehomelab/homelab/internal/testhelpers"
-	"github.com/tuxdudehomelab/homelab/internal/testutils"
-	"github.com/tuxdudehomelab/homelab/internal/utils"
+	"github.com/tuxgal/homelab/internal/cmdexec/fakecmdexec"
+	"github.com/tuxgal/homelab/internal/config"
+	"github.com/tuxgal/homelab/internal/docker"
+	"github.com/tuxgal/homelab/internal/docker/fakedocker"
+	"github.com/tuxgal/homelab/internal/inspect"
+	"github.com/tuxgal/homelab/internal/testhelpers"
+	"github.com/tuxgal/homelab/internal/testutils"
+	"github.com/tuxgal/homelab/internal/utils"
+	"github.com/tuxgal/tuxlog"
 )
 
 var containerStartTests = []struct {
@@ -467,7 +467,7 @@ func TestContainerStart(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			buf := new(bytes.Buffer)
-			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(zzzlog.LvlDebug, buf)
+			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(tuxlog.LvlDebug, buf)
 			// Enable debug inspect level while running the container start tests
 			// for extra code coverage.
 			if tc.ctxInfo.InspectLevel == inspect.HomelabInspectLevelNone {
@@ -981,7 +981,7 @@ func TestContainerStartErrors(t *testing.T) {
 			t.Parallel()
 
 			buf := new(bytes.Buffer)
-			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(zzzlog.LvlDebug, buf)
+			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(tuxlog.LvlDebug, buf)
 			if tc.ctxInfo.ContainerPurgeKillAttempts == 0 {
 				// Reduce the number of attempts to keep the tests executing quickly.
 				tc.ctxInfo.ContainerPurgeKillAttempts = 5
@@ -1324,7 +1324,7 @@ func TestContainerStop(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			buf := new(bytes.Buffer)
-			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(zzzlog.LvlDebug, buf)
+			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(tuxlog.LvlDebug, buf)
 			// Enable debug inspect level while running the container start tests
 			// for extra code coverage.
 			if tc.ctxInfo.InspectLevel == inspect.HomelabInspectLevelNone {
@@ -1515,7 +1515,7 @@ func TestContainerStopErrors(t *testing.T) {
 			t.Parallel()
 
 			buf := new(bytes.Buffer)
-			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(zzzlog.LvlDebug, buf)
+			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(tuxlog.LvlDebug, buf)
 			if tc.ctxInfo.ContainerPurgeKillAttempts == 0 {
 				// Reduce the number of attempts to keep the tests executing quickly.
 				tc.ctxInfo.ContainerPurgeKillAttempts = 5
@@ -1829,7 +1829,7 @@ func TestContainerPurge(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			buf := new(bytes.Buffer)
-			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(zzzlog.LvlDebug, buf)
+			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(tuxlog.LvlDebug, buf)
 			// Enable debug inspect level while running the container start tests
 			// for extra code coverage.
 			if tc.ctxInfo.InspectLevel == inspect.HomelabInspectLevelNone {
@@ -2081,7 +2081,7 @@ func TestContainerPurgeErrors(t *testing.T) {
 			t.Parallel()
 
 			buf := new(bytes.Buffer)
-			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(zzzlog.LvlDebug, buf)
+			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(tuxlog.LvlDebug, buf)
 			if tc.ctxInfo.ContainerPurgeKillAttempts == 0 {
 				// Reduce the number of attempts to keep the tests executing quickly.
 				tc.ctxInfo.ContainerPurgeKillAttempts = 5
@@ -2264,7 +2264,7 @@ func TestContainerDockerConfigs(t *testing.T) {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()
 			buf := new(bytes.Buffer)
-			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(zzzlog.LvlDebug, buf)
+			tc.ctxInfo.Logger = testutils.NewCapturingTestLogger(tuxlog.LvlDebug, buf)
 			// Enable debug inspect level while running the container start tests
 			// for extra code coverage.
 			if tc.ctxInfo.InspectLevel == inspect.HomelabInspectLevelNone {

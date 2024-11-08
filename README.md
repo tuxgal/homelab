@@ -1,6 +1,6 @@
-# Home Lab CLI (homelab)
+# Homelab CLI (homelab)
 
-[![Build](https://github.com/TuxdudeHomeLab/homelab/actions/workflows/build.yml/badge.svg)](https://github.com/TuxdudeHomeLab/homelab/actions/workflows/build.yml) [![Tests](https://github.com/TuxdudeHomeLab/homelab/actions/workflows/tests.yml/badge.svg)](https://github.com/TuxdudeHomeLab/homelab/actions/workflows/tests.yml) [![Lint](https://github.com/TuxdudeHomeLab/homelab/actions/workflows/lint.yml/badge.svg)](https://github.com/TuxdudeHomeLab/homelab/actions/workflows/lint.yml) [![CodeQL](https://github.com/TuxdudeHomeLab/homelab/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/TuxdudeHomeLab/homelab/actions/workflows/codeql-analysis.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/tuxdudehomelab/homelab)](https://goreportcard.com/report/github.com/tuxdudehomelab/homelab)
+[![Build](https://github.com/tuxgal/homelab/actions/workflows/build.yml/badge.svg)](https://github.com/tuxgal/homelab/actions/workflows/build.yml) [![Tests](https://github.com/tuxgal/homelab/actions/workflows/tests.yml/badge.svg)](https://github.com/tuxgal/homelab/actions/workflows/tests.yml) [![Lint](https://github.com/tuxgal/homelab/actions/workflows/lint.yml/badge.svg)](https://github.com/tuxgal/homelab/actions/workflows/lint.yml) [![CodeQL](https://github.com/tuxgal/homelab/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/tuxgal/homelab/actions/workflows/codeql-analysis.yml) [![Go Report Card](https://goreportcard.com/badge/github.com/tuxgal/homelab)](https://goreportcard.com/report/github.com/tuxgal/homelab)
 
 A CLI for managing both the configuration and deployment of groups of
 docker containers on a given host.

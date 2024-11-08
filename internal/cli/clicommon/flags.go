@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"github.com/tuxdudehomelab/homelab/internal/cli/cliconfig"
+	"github.com/tuxgal/homelab/internal/cli/cliconfig"
 )
 
 const (

@@ -8,13 +8,13 @@ import (
 	"io"
 	"os"
 
-	"github.com/tuxdude/zzzlog"
-	"github.com/tuxdude/zzzlogi"
-	"github.com/tuxdudehomelab/homelab/internal/cli"
-	clierrors "github.com/tuxdudehomelab/homelab/internal/cli/errors"
-	"github.com/tuxdudehomelab/homelab/internal/cli/version"
-	"github.com/tuxdudehomelab/homelab/internal/inspect"
-	"github.com/tuxdudehomelab/homelab/internal/log"
+	"github.com/tuxgal/homelab/internal/cli"
+	clierrors "github.com/tuxgal/homelab/internal/cli/errors"
+	"github.com/tuxgal/homelab/internal/cli/version"
+	"github.com/tuxgal/homelab/internal/inspect"
+	"github.com/tuxgal/homelab/internal/log"
+	"github.com/tuxgal/tuxlog"
+	"github.com/tuxgal/tuxlogi"
 )
 
 const (
@@ -30,22 +30,22 @@ var (
 	pkgTimestamp = "unset"
 )
 
-func buildLogger(ctx context.Context, dest io.Writer) zzzlogi.Logger {
-	config := zzzlog.NewConsoleLoggerConfig()
+func buildLogger(ctx context.Context, dest io.Writer) tuxlogi.Logger {
+	config := tuxlog.NewConsoleLoggerConfig()
 	config.Dest = dest
 	lvl := inspect.HomelabInspectLevelFromContext(ctx)
 	switch lvl {
 	case inspect.HomelabInspectLevelTrace:
-		config.MaxLevel = zzzlog.LvlTrace
+		config.MaxLevel = tuxlog.LvlTrace
 		config.SkipCallerInfo = false
 	case inspect.HomelabInspectLevelDebug:
-		config.MaxLevel = zzzlog.LvlDebug
+		config.MaxLevel = tuxlog.LvlDebug
 		config.SkipCallerInfo = false
 	default:
-		config.MaxLevel = zzzlog.LvlInfo
+		config.MaxLevel = tuxlog.LvlInfo
 		config.SkipCallerInfo = true
 	}
-	return zzzlog.NewLogger(config)
+	return tuxlog.NewLogger(config)
 }
 
 func updateHomelabInspectLevel(ctx context.Context) context.Context {
