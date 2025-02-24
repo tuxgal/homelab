@@ -11,7 +11,6 @@ import (
 	"github.com/tuxgal/homelab/internal/docker"
 	"github.com/tuxgal/homelab/internal/utils"
 
-	dtypes "github.com/docker/docker/api/types"
 	dcontainer "github.com/docker/docker/api/types/container"
 	dimage "github.com/docker/docker/api/types/image"
 	dnetwork "github.com/docker/docker/api/types/network"
@@ -268,21 +267,21 @@ func (f *FakeDockerHost) ContainerCreate(ctx context.Context, cConfig *dcontaine
 	return resp, nil
 }
 
-func (f *FakeDockerHost) ContainerInspect(ctx context.Context, containerName string) (dtypes.ContainerJSON, error) {
+func (f *FakeDockerHost) ContainerInspect(ctx context.Context, containerName string) (dcontainer.InspectResponse, error) {
 	f.mu.RLock()
 	defer f.mu.RUnlock()
 
 	ct, found := f.containers[containerName]
 	if !found {
-		return dtypes.ContainerJSON{}, derrdefs.NotFound(fmt.Errorf("container %s not found on the fake docker host", containerName))
+		return dcontainer.InspectResponse{}, derrdefs.NotFound(fmt.Errorf("container %s not found on the fake docker host", containerName))
 	}
 
 	if _, found := f.failContainerInspect[containerName]; found {
-		return dtypes.ContainerJSON{}, fmt.Errorf("failed to inspect container %s on the fake docker host", containerName)
+		return dcontainer.InspectResponse{}, fmt.Errorf("failed to inspect container %s on the fake docker host", containerName)
 	}
 
-	return dtypes.ContainerJSON{
-		ContainerJSONBase: &dtypes.ContainerJSONBase{
+	return dcontainer.InspectResponse{
+		ContainerJSONBase: &dcontainer.ContainerJSONBase{
 			ID:    ct.id,
 			State: fakeDockerContainerState(ct.state),
 			Image: ct.containerConfig.Image,
@@ -588,8 +587,8 @@ func (f *FakeDockerHost) ContainerStopIssued(containerName string) bool {
 	return false
 }
 
-func fakeDockerContainerState(state docker.ContainerState) *dtypes.ContainerState {
-	st := &dtypes.ContainerState{}
+func fakeDockerContainerState(state docker.ContainerState) *dcontainer.State {
+	st := &dcontainer.State{}
 	switch state {
 	case docker.ContainerStateCreated:
 		st.Status = "created"

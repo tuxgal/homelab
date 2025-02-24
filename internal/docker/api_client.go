@@ -4,7 +4,6 @@ import (
 	"context"
 	"io"
 
-	dtypes "github.com/docker/docker/api/types"
 	dcontainer "github.com/docker/docker/api/types/container"
 	dimage "github.com/docker/docker/api/types/image"
 	dnetwork "github.com/docker/docker/api/types/network"
@@ -16,7 +15,7 @@ type APIClient interface {
 	Close() error
 
 	ContainerCreate(ctx context.Context, config *dcontainer.Config, hostConfig *dcontainer.HostConfig, networkingConfig *dnetwork.NetworkingConfig, platform *ocispec.Platform, containerName string) (dcontainer.CreateResponse, error)
-	ContainerInspect(ctx context.Context, containerName string) (dtypes.ContainerJSON, error)
+	ContainerInspect(ctx context.Context, containerName string) (dcontainer.InspectResponse, error)
 	ContainerKill(ctx context.Context, containerName, signal string) error
 	ContainerRemove(ctx context.Context, containerName string, options dcontainer.RemoveOptions) error
 	ContainerStart(ctx context.Context, containerName string, options dcontainer.StartOptions) error
