@@ -107,11 +107,13 @@ ipam:
           v4: 172.18.18.0/24
         priority: 1
         containers:
-          - ip: 172.18.18.11
+          - ip:
+              v4: 172.18.18.11
             container:
               group: group1
               container: ct1
-          - ip: 172.18.18.12
+          - ip:
+              v4: 172.18.18.12
             container:
               group: group1
               container: ct2
@@ -121,7 +123,8 @@ ipam:
           v4: 172.18.19.0/24
         priority: 1
         containers:
-          - ip: 172.18.19.11
+          - ip:
+              v4: 172.18.19.11
             container:
               group: group2
               container: ct3
@@ -131,7 +134,8 @@ ipam:
           v4: 172.18.20.0/24
         priority: 1
         containers:
-          - ip: 172.18.20.11
+          - ip:
+              v4: 172.18.20.11
             container:
               group: group3
               container: ct4
@@ -141,15 +145,18 @@ ipam:
           v4: 172.18.30.0/24
         priority: 2
         containers:
-          - ip: 172.18.30.11
+          - ip:
+              v4: 172.18.30.11
             container:
               group: group1
               container: ct1
-          - ip: 172.18.30.12
+          - ip:
+              v4: 172.18.30.12
             container:
               group: group1
               container: ct2
-          - ip: 172.18.30.13
+          - ip:
+              v4: 172.18.30.13
             container:
               group: group2
               container: ct3
@@ -543,16 +550,20 @@ ignore:
 								V4: "172.18.18.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.18.11",
+									IP: config.ContainerIP{
+										IPv4: "172.18.18.11",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
 									},
 								},
 								{
-									IP: "172.18.18.12",
+									IP: config.ContainerIP{
+										IPv4: "172.18.18.12",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct2",
@@ -567,9 +578,11 @@ ignore:
 								V4: "172.18.19.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.19.11",
+									IP: config.ContainerIP{
+										IPv4: "172.18.19.11",
+									},
 									Container: config.ContainerReference{
 										Group:     "group2",
 										Container: "ct3",
@@ -584,9 +597,11 @@ ignore:
 								V4: "172.18.20.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.20.11",
+									IP: config.ContainerIP{
+										IPv4: "172.18.20.11",
+									},
 									Container: config.ContainerReference{
 										Group:     "group3",
 										Container: "ct4",
@@ -601,23 +616,29 @@ ignore:
 								V4: "172.18.30.0/24",
 							},
 							Priority: 2,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.30.11",
+									IP: config.ContainerIP{
+										IPv4: "172.18.30.11",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
 									},
 								},
 								{
-									IP: "172.18.30.12",
+									IP: config.ContainerIP{
+										IPv4: "172.18.30.12",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct2",
 									},
 								},
 								{
-									IP: "172.18.30.13",
+									IP: config.ContainerIP{
+										IPv4: "172.18.30.13",
+									},
 									Container: config.ContainerReference{
 										Group:     "group2",
 										Container: "ct3",
@@ -1512,16 +1533,20 @@ var buildDeploymentFromConfigsPathTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.11",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+									},
 									Container: config.ContainerReference{
 										Group:     "g1",
 										Container: "c1",
 									},
 								},
 								{
-									IP: "172.18.100.12",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.12",
+									},
 									Container: config.ContainerReference{
 										Group:     "g1",
 										Container: "c2",
@@ -1536,9 +1561,11 @@ var buildDeploymentFromConfigsPathTests = []struct {
 								V4: "172.18.101.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.101.21",
+									IP: config.ContainerIP{
+										IPv4: "172.18.101.21",
+									},
 									Container: config.ContainerReference{
 										Group:     "g2",
 										Container: "c3",
@@ -1553,23 +1580,29 @@ var buildDeploymentFromConfigsPathTests = []struct {
 								V4: "172.19.200.0/24",
 							},
 							Priority: 2,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.19.200.201",
+									IP: config.ContainerIP{
+										IPv4: "172.19.200.201",
+									},
 									Container: config.ContainerReference{
 										Group:     "g1",
 										Container: "c1",
 									},
 								},
 								{
-									IP: "172.19.200.202",
+									IP: config.ContainerIP{
+										IPv4: "172.19.200.202",
+									},
 									Container: config.ContainerReference{
 										Group:     "g1",
 										Container: "c2",
 									},
 								},
 								{
-									IP: "172.19.200.203",
+									IP: config.ContainerIP{
+										IPv4: "172.19.200.203",
+									},
 									Container: config.ContainerReference{
 										Group:     "g2",
 										Container: "c3",
@@ -3113,9 +3146,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.11",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+									},
 									Container: config.ContainerReference{
 										Container: "ct1",
 									},
@@ -3144,9 +3179,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.11",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+									},
 									Container: config.ContainerReference{
 										Group: "g1",
 									},
@@ -3175,9 +3212,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "garbage-ip",
+									IP: config.ContainerIP{
+										IPv4: "garbage-ip",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3207,9 +3246,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3239,9 +3280,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.1.2.3.4",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.1.2.3.4",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3271,9 +3314,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.101.2",
+									IP: config.ContainerIP{
+										IPv4: "172.18.101.2",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3303,9 +3348,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.0",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.0",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3335,9 +3382,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.1",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.1",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3367,16 +3416,20 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.2",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.2",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
 									},
 								},
 								{
-									IP: "172.18.100.3",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.3",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3406,30 +3459,38 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.2",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.2",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
 									},
 								},
 								{
-									IP: "172.18.100.3",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.3",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct2",
 									},
 								},
 								{
-									IP: "172.18.100.4",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.4",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct3",
 									},
 								},
 								{
-									IP: "172.18.100.2",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.2",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct4",
@@ -3459,9 +3520,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.2",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.2",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3476,9 +3539,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.101.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.101.2",
+									IP: config.ContainerIP{
+										IPv4: "172.18.101.2",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",
@@ -3771,9 +3836,11 @@ var buildDeploymentFromConfigErrorTests = []struct {
 								V4: "172.18.100.0/24",
 							},
 							Priority: 1,
-							Containers: []config.ContainerIP{
+							Containers: []config.ContainerIPInfo{
 								{
-									IP: "172.18.100.2",
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.2",
+									},
 									Container: config.ContainerReference{
 										Group:     "group1",
 										Container: "ct1",

@@ -2332,9 +2332,11 @@ func buildSingleContainerConfig(ct config.ContainerReference, image string) conf
 						V4: "172.18.101.0/24",
 					},
 					Priority: 1,
-					Containers: []config.ContainerIP{
+					Containers: []config.ContainerIPInfo{
 						{
-							IP:        "172.18.101.11",
+							IP: config.ContainerIP{
+								IPv4: "172.18.101.11",
+							},
 							Container: ct,
 						},
 					},
@@ -2346,9 +2348,11 @@ func buildSingleContainerConfig(ct config.ContainerReference, image string) conf
 						V4: "172.18.201.0/24",
 					},
 					Priority: 2,
-					Containers: []config.ContainerIP{
+					Containers: []config.ContainerIPInfo{
 						{
-							IP:        "172.18.201.11",
+							IP: config.ContainerIP{
+								IPv4: "172.18.201.11",
+							},
 							Container: ct,
 						},
 					},

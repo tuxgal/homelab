@@ -360,7 +360,7 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 		containers := make(map[config.ContainerReference]struct{})
 		containerIPs := make(map[netip.Addr]struct{})
 		for _, cip := range n.Containers {
-			ip := cip.IP
+			ip := cip.IP.IPv4
 			ct := cip.Container
 			if err := validateContainerReference(&ct); err != nil {
 				return nil, nil, fmt.Errorf("container IP config within network %s has invalid container reference, reason: %w", n.Name, err)
@@ -605,8 +605,8 @@ func validateContainerReference(ref *config.ContainerReference) error {
 	return nil
 }
 
-func newBridgeModeEndpoint(network *Network, ip string) *containerNetworkEndpoint {
-	return &containerNetworkEndpoint{network: network, ip: ip}
+func newBridgeModeEndpoint(network *Network, ipv4 string) *containerNetworkEndpoint {
+	return &containerNetworkEndpoint{network: network, ipv4: ipv4}
 }
 
 func newContainerModeEndpoint(network *Network) *containerNetworkEndpoint {

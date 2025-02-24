@@ -112,11 +112,11 @@ type Networks struct {
 // BridgeModeNetwork represents a docker bridge mode network that one
 // or more containers attach to.
 type BridgeModeNetwork struct {
-	Name              string        `yaml:"name,omitempty" json:"name,omitempty"`
-	HostInterfaceName string        `yaml:"hostInterfaceName,omitempty" json:"hostInterfaceName,omitempty"`
-	CIDR              NetworkCIDR   `yaml:"cidr,omitempty" json:"cidr,omitempty"`
-	Priority          int           `yaml:"priority,omitempty" json:"priority,omitempty"`
-	Containers        []ContainerIP `yaml:"containers,omitempty" json:"containers,omitempty"`
+	Name              string            `yaml:"name,omitempty" json:"name,omitempty"`
+	HostInterfaceName string            `yaml:"hostInterfaceName,omitempty" json:"hostInterfaceName,omitempty"`
+	CIDR              NetworkCIDR       `yaml:"cidr,omitempty" json:"cidr,omitempty"`
+	Priority          int               `yaml:"priority,omitempty" json:"priority,omitempty"`
+	Containers        []ContainerIPInfo `yaml:"containers,omitempty" json:"containers,omitempty"`
 }
 
 // NetworkCIDR represents the subnet CIDR of the bridge mode network.
@@ -132,10 +132,15 @@ type ContainerModeNetwork struct {
 	AttachingContainers []ContainerReference `yaml:"attachingContainers,omitempty" json:"attachingContainers,omitempty"`
 }
 
+// ContainerIPInfo represents the IP information for a container.
+type ContainerIPInfo struct {
+	IP        ContainerIP        `yaml:"ip,omitempty" json:"ip,omitempty"`
+	Container ContainerReference `yaml:"container,omitempty" json:"container,omitempty"`
+}
+
 // ContainerIP represents the IP information for a container.
 type ContainerIP struct {
-	IP        string             `yaml:"ip,omitempty" json:"ip,omitempty"`
-	Container ContainerReference `yaml:"container,omitempty" json:"container,omitempty"`
+	IPv4 string `yaml:"v4,omitempty" json:"v4,omitempty"`
 }
 
 // Host represents the host specific information.
