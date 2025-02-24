@@ -23,6 +23,9 @@ type bridgeModeNetworkInfo struct {
 	hostInterfaceName string
 	v4CIDR            netip.Prefix
 	v4Gateway         netip.Addr
+	enableV6          bool
+	v6CIDR            netip.Prefix
+	v6Gateway         netip.Addr
 }
 
 type containerModeNetworkInfo struct {
@@ -112,18 +115,26 @@ func (n *Network) createOptions() dnetwork.CreateOptions {
 		panic("Only bridge mode network creation is possible")
 	}
 
+	ipamConfigs := []dnetwork.IPAMConfig{
+		{
+			Subnet:  n.bridgeModeInfo.v4CIDR.String(),
+			Gateway: n.bridgeModeInfo.v4Gateway.String(),
+		},
+	}
+	if n.bridgeModeInfo.enableV6 {
+		ipamConfigs = append(ipamConfigs, dnetwork.IPAMConfig{
+			Subnet:  n.bridgeModeInfo.v6CIDR.String(),
+			Gateway: n.bridgeModeInfo.v6Gateway.String(),
+		})
+	}
+
 	return dnetwork.CreateOptions{
 		Driver:     "bridge",
 		Scope:      "local",
 		EnableIPv6: newutils.NewBool(false),
 		IPAM: &dnetwork.IPAM{
 			Driver: "default",
-			Config: []dnetwork.IPAMConfig{
-				{
-					Subnet:  n.bridgeModeInfo.v4CIDR.String(),
-					Gateway: n.bridgeModeInfo.v4Gateway.String(),
-				},
-			},
+			Config: ipamConfigs,
 		},
 		Internal:   false,
 		Attachable: false,
@@ -132,9 +143,11 @@ func (n *Network) createOptions() dnetwork.CreateOptions {
 		Options: map[string]string{
 			"com.docker.network.bridge.enable_icc":           "true",
 			"com.docker.network.bridge.enable_ip_masquerade": "true",
-			"com.docker.network.bridge.host_binding_ipv4":    n.bridgeModeInfo.v4Gateway.String(),
-			"com.docker.network.bridge.name":                 n.bridgeModeInfo.hostInterfaceName,
-			"com.docker.network.bridge.mtu":                  "1500",
+			// There is no equivalent option right now for IPv6 as per
+			// docker documentation.
+			"com.docker.network.bridge.host_binding_ipv4": n.bridgeModeInfo.v4Gateway.String(),
+			"com.docker.network.bridge.name":              n.bridgeModeInfo.hostInterfaceName,
+			"com.docker.network.bridge.mtu":               "1500",
 		},
 	}
 }

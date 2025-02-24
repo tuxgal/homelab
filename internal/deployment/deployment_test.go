@@ -1531,6 +1531,7 @@ var buildDeploymentFromConfigsPathTests = []struct {
 							HostInterfaceName: "docker-net1",
 							CIDR: config.NetworkCIDR{
 								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
 							},
 							Priority: 1,
 							Containers: []config.ContainerIPInfo{
@@ -1578,6 +1579,7 @@ var buildDeploymentFromConfigsPathTests = []struct {
 							HostInterfaceName: "docker-cmn",
 							CIDR: config.NetworkCIDR{
 								V4: "172.19.200.0/24",
+								V6: "fd99:172:19:200::/64",
 							},
 							Priority: 2,
 							Containers: []config.ContainerIPInfo{
@@ -2827,7 +2829,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `network net1 cannot have a non-positive priority 0`,
 	},
 	{
-		name: "Invalid CIDR - Empty",
+		name: "Invalid v4 CIDR - Empty",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -2847,7 +2849,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR  of network net1 is invalid, reason: netip\.ParsePrefix\(""\): no '/'`,
 	},
 	{
-		name: "Invalid CIDR - Unparsable",
+		name: "Invalid v4 CIDR - Unparsable",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -2870,7 +2872,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR garbage-cidr of network net1 is invalid, reason: netip\.ParsePrefix\("garbage-cidr"\): no '/'`,
 	},
 	{
-		name: "Invalid CIDR - Missing /",
+		name: "Invalid v4 CIDR - Missing /",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -2893,7 +2895,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 172\.18\.100\.16 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.100\.16"\): no '/'`,
 	},
 	{
-		name: "Invalid CIDR - Wrong Prefix Length",
+		name: "Invalid v4 CIDR - Wrong Prefix Length",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -2916,7 +2918,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 172\.18\.100\.0/33 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.100\.0/33"\): prefix length out of range`,
 	},
 	{
-		name: "Invalid CIDR - IPv6",
+		name: "Invalid v4 CIDR - IPv6",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -2939,7 +2941,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 2002::1234:abcd:ffff:c0a8:101/64 of network net1 is not an IPv4 subnet CIDR`,
 	},
 	{
-		name: "Invalid CIDR - Octets Out Of Range",
+		name: "Invalid v4 CIDR - Octets Out Of Range",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -2962,7 +2964,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 172\.18\.260\.0/24 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.260\.0/24"\): ParseAddr\("172\.18\.260\.0"\): IPv4 field has value >255`,
 	},
 	{
-		name: "Invalid CIDR - Not A Network Address",
+		name: "Invalid v4 CIDR - Not A Network Address",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -2985,7 +2987,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 172\.18\.100\.1/25 of network net1 is not the same as the network address 172\.18\.100\.0/25`,
 	},
 	{
-		name: "Invalid CIDR - Long Prefix 31",
+		name: "Invalid v4 CIDR - Long Prefix 31",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3008,7 +3010,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 172\.18\.100\.0/31 of network net1 \(prefix length: 31\) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations`,
 	},
 	{
-		name: "Invalid CIDR - Long Prefix 32",
+		name: "Invalid v4 CIDR - Long Prefix 32",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3031,7 +3033,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 172\.18\.100\.0/32 of network net1 \(prefix length: 32\) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations`,
 	},
 	{
-		name: "Non-RFC1918 CIDR - Public IPv4",
+		name: "Non-RFC1918 v4 CIDR - Public IPv4",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3054,7 +3056,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 11\.12\.13\.0/24 of network net1 is not within the RFC1918 private address space`,
 	},
 	{
-		name: "Non-RFC1918 CIDR - Link Local",
+		name: "Non-RFC1918 v4 CIDR - Link Local",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3077,7 +3079,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 169\.254\.10\.0/24 of network net1 is not within the RFC1918 private address space`,
 	},
 	{
-		name: "Non-RFC1918 CIDR - Multicast",
+		name: "Non-RFC1918 v4 CIDR - Multicast",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3100,7 +3102,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v4 CIDR 224\.0\.0\.0/26 of network net1 is not within the RFC1918 private address space`,
 	},
 	{
-		name: "Overlapping CIDR",
+		name: "Overlapping v4 CIDR",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3129,6 +3131,303 @@ var buildDeploymentFromConfigErrorTests = []struct {
 			},
 		},
 		want: `v4 CIDR 172\.18\.0\.0/16 of network net2 overlaps with v4 CIDR 172\.18\.100\.0/24 of network net1`,
+	},
+	{
+		name: "Invalid v6 CIDR - Unparsable",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "garbage-cidr",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR garbage-cidr of network net1 is invalid, reason: netip\.ParsePrefix\("garbage-cidr"\): no '/'`,
+	},
+	{
+		name: "Invalid v6 CIDR - Missing /",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100:16::",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR fd99:172:18:100:16:: of network net1 is invalid, reason: netip\.ParsePrefix\("fd99:172:18:100:16::"\): no '/'`,
+	},
+	{
+		name: "Invalid v6 CIDR - Wrong Prefix Length - Larger",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/63",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR fd99:172:18:100::/63 of network net1 \(prefix length: 63\) must have a prefix length 64 as per the convention for IPv6 networks`,
+	},
+	{
+		name: "Invalid v6 CIDR - Wrong Prefix Length - Smaller",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/65",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR fd99:172:18:100::/65 of network net1 \(prefix length: 65\) must have a prefix length 64 as per the convention for IPv6 networks`,
+	},
+	{
+		name: "Invalid v6 CIDR - IPv4",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "172.18.101.0/24",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR 172\.18\.101\.0/24 of network net1 is not an IPv6 subnet CIDR`,
+	},
+	{
+		name: "Invalid v6 CIDR - Hextets Out Of Range",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:f100a::/64",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR fd99:172:18:f100a::/64 of network net1 is invalid, reason: netip\.ParsePrefix\("fd99:172:18:f100a::/64"\): ParseAddr\("fd99:172:18:f100a::"\): each group must have 4 or less digits \(at "f100a::"\)`,
+	},
+	{
+		name: "Invalid v6 CIDR - Not A Network Address",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::1/64",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR fd99:172:18:100::1/64 of network net1 is not the same as the network address fd99:172:18:100::/64`,
+	},
+	{
+		name: "Non-ULA v6 CIDR - GUA IPv6",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "2001:1234:5678:90ab::/64",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR 2001:1234:5678:90ab::/64 of network net1 is not within the ULA private address space`,
+	},
+	{
+		name: "Non-ULA v6 CIDR - Link Local",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fe80:1234:5678:90ab::/64",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR fe80:1234:5678:90ab::/64 of network net1 is not within the ULA private address space`,
+	},
+	{
+		name: "Non-ULA v6 CIDR - Multicast",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "ff00:1234:5678:90ab::/64",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR ff00:1234:5678:90ab::/64 of network net1 is not within the ULA private address space`,
+	},
+	{
+		name: "ULA v6 CIDR - Reserved ULA Prefix IPv6",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fcab:1234:5678:90ab::/64",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR fcab:1234:5678:90ab::/64 of network net1 overlaps with the reserved ULA prefix fc00::/8`,
+	},
+	{
+		name: "Overlapping v6 CIDR",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:1234:5678:90ab::/64",
+							},
+							Priority: 1,
+						},
+						{
+							Name:              "net2",
+							HostInterfaceName: "docker-net2",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.101.0/24",
+								V6: "fd99:1234:5678:90ab::/64",
+							},
+							Priority: 1,
+						},
+					},
+				},
+			},
+		},
+		want: `v6 CIDR fd99:1234:5678:90ab::/64 of network net2 overlaps with v6 CIDR fd99:1234:5678:90ab::/64 of network net1`,
 	},
 	{
 		name: "Bridge Mode Network Invalid Container Reference - Empty Group",

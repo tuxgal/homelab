@@ -67,6 +67,7 @@ ipam:
         hostInterfaceName: docker-net1
         cidr:
           v4: 172\.18\.100\.0/24
+          v6: fd99:172:18:100::/64
         priority: 1
         containers:
           - ip:
@@ -831,6 +832,7 @@ ipam:
         hostInterfaceName: docker-net1
         cidr:
           v4: 172\.18\.100\.0/24
+          v6: fd99:172:18:100::/64
         priority: 1
         containers:
           - ip:

@@ -18,6 +18,15 @@ import (
 	"github.com/tuxgal/homelab/internal/utils"
 )
 
+const (
+	reservedULAAddr     = "fc00::"
+	reservedULAAddrBits = 8
+)
+
+var (
+	reservedULAPrefix = netip.PrefixFrom(netip.MustParseAddr(reservedULAAddr), reservedULAAddrBits)
+)
+
 func validateGlobalConfig(ctx context.Context, parentEnv *env.ConfigEnvManager, conf *config.Global) (*env.ConfigEnvManager, error) {
 	if err := validateBaseDir(conf.BaseDir); err != nil {
 		return nil, err
@@ -303,6 +312,7 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 	hostInterfaces := utils.StringSet{}
 	bridgeModeNetworks := conf.Networks.BridgeModeNetworks
 	v4Prefixes := make(map[netip.Prefix]string)
+	v6Prefixes := make(map[netip.Prefix]string)
 	containerEndpoints := make(map[config.ContainerReference]networkEndpointList)
 	allBridgeModeContainers := make(map[config.ContainerReference]struct{})
 
@@ -349,11 +359,47 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 		}
 		v4Prefixes[v4Prefix] = n.Name
 		v4GatewayAddr := v4NetAddr.Next()
+
+		var v6Prefix netip.Prefix
+		var v6GatewayAddr netip.Addr
+		if n.CIDR.V6 != "" {
+			v6Prefix, err := netip.ParsePrefix(n.CIDR.V6)
+			if err != nil {
+				return nil, nil, fmt.Errorf("v6 CIDR %s of network %s is invalid, reason: %w", n.CIDR.V6, n.Name, err)
+			}
+			v6NetAddr := v6Prefix.Addr()
+			if !v6NetAddr.Is6() {
+				return nil, nil, fmt.Errorf("v6 CIDR %s of network %s is not an IPv6 subnet CIDR", n.CIDR.V6, n.Name)
+			}
+			if masked := v6Prefix.Masked(); masked.Addr() != v6NetAddr {
+				return nil, nil, fmt.Errorf("v6 CIDR %s of network %s is not the same as the network address %s", n.CIDR.V6, n.Name, masked)
+			}
+			if prefixLen := v6Prefix.Bits(); prefixLen != 64 {
+				return nil, nil, fmt.Errorf("v6 CIDR %s of network %s (prefix length: %d) must have a prefix length 64 as per the convention for IPv6 networks", n.CIDR.V6, n.Name, prefixLen)
+			}
+			if !v6NetAddr.IsPrivate() {
+				return nil, nil, fmt.Errorf("v6 CIDR %s of network %s is not within the ULA private address space", n.CIDR.V6, n.Name)
+			}
+			if v6Prefix.Overlaps(reservedULAPrefix) {
+				return nil, nil, fmt.Errorf("v6 CIDR %s of network %s overlaps with the reserved ULA prefix %s", n.CIDR.V6, n.Name, reservedULAPrefix)
+			}
+			for pre, preNet := range v6Prefixes {
+				if v6Prefix.Overlaps(pre) {
+					return nil, nil, fmt.Errorf("v6 CIDR %s of network %s overlaps with v6 CIDR %s of network %s", n.CIDR.V6, n.Name, pre, preNet)
+				}
+			}
+			v6Prefixes[v6Prefix] = n.Name
+			v6GatewayAddr = v6NetAddr.Next()
+		}
+
 		bmn := newBridgeModeNetwork(n.Name, n.Priority, &bridgeModeNetworkInfo{
 			priority:          n.Priority,
 			hostInterfaceName: n.HostInterfaceName,
 			v4CIDR:            v4Prefix,
 			v4Gateway:         v4GatewayAddr,
+			enableV6:          n.CIDR.V6 != "",
+			v6CIDR:            v6Prefix,
+			v6Gateway:         v6GatewayAddr,
 		})
 		networks[n.Name] = bmn
 
