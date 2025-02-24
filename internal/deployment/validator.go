@@ -406,36 +406,36 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 		containers := make(map[config.ContainerReference]struct{})
 		containerIPs := make(map[netip.Addr]struct{})
 		for _, cip := range n.Containers {
-			ip := cip.IP.IPv4
+			ipv4 := cip.IP.IPv4
 			ct := cip.Container
 			if err := validateContainerReference(&ct); err != nil {
 				return nil, nil, fmt.Errorf("container IP config within network %s has invalid container reference, reason: %w", n.Name, err)
 			}
 
-			caddr, err := netip.ParseAddr(ip)
+			caddr, err := netip.ParseAddr(ipv4)
 			if err != nil {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s has invalid IP %s, reason: %w", ct.Group, ct.Container, n.Name, ip, err)
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s has invalid IP %s, reason: %w", ct.Group, ct.Container, n.Name, ipv4, err)
 			}
 			if !v4Prefix.Contains(caddr) {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s that does not belong to the network v4 CIDR %s", ct.Group, ct.Container, n.Name, ip, v4Prefix)
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s that does not belong to the network v4 CIDR %s", ct.Group, ct.Container, n.Name, ipv4, v4Prefix)
 			}
 			if caddr.Compare(v4NetAddr) == 0 {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the network address %s", ct.Group, ct.Container, n.Name, ip, v4NetAddr)
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the network address %s", ct.Group, ct.Container, n.Name, ipv4, v4NetAddr)
 			}
 			if caddr.Compare(v4GatewayAddr) == 0 {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the gateway address %s", ct.Group, ct.Container, n.Name, ip, v4GatewayAddr)
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the gateway address %s", ct.Group, ct.Container, n.Name, ipv4, v4GatewayAddr)
 			}
 			if _, found := containers[ct]; found {
 				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} cannot have multiple endpoints in network %s", ct.Group, ct.Container, n.Name)
 			}
 			if _, found := containerIPs[caddr]; found {
-				return nil, nil, fmt.Errorf("IP %s of container {Group:%s Container:%s} is already in use by another container in network %s", ip, ct.Group, ct.Container, n.Name)
+				return nil, nil, fmt.Errorf("IP %s of container {Group:%s Container:%s} is already in use by another container in network %s", ipv4, ct.Group, ct.Container, n.Name)
 			}
 
 			containers[ct] = struct{}{}
 			allBridgeModeContainers[ct] = struct{}{}
 			containerIPs[caddr] = struct{}{}
-			containerEndpoints[ct] = append(containerEndpoints[ct], newBridgeModeEndpoint(bmn, ip))
+			containerEndpoints[ct] = append(containerEndpoints[ct], newBridgeModeEndpoint(bmn, ipv4))
 		}
 	}
 
