@@ -2328,8 +2328,10 @@ func buildSingleContainerConfig(ct config.ContainerReference, image string) conf
 				{
 					Name:              fmt.Sprintf("%s-bridge", ct.Group),
 					HostInterfaceName: fmt.Sprintf("docker-%s", ct.Group),
-					CIDR:              "172.18.101.0/24",
-					Priority:          1,
+					CIDR: config.NetworkCIDR{
+						V4: "172.18.101.0/24",
+					},
+					Priority: 1,
 					Containers: []config.ContainerIP{
 						{
 							IP:        "172.18.101.11",
@@ -2340,8 +2342,10 @@ func buildSingleContainerConfig(ct config.ContainerReference, image string) conf
 				{
 					Name:              "proxy-bridge",
 					HostInterfaceName: "docker-prx",
-					CIDR:              "172.18.201.0/24",
-					Priority:          2,
+					CIDR: config.NetworkCIDR{
+						V4: "172.18.201.0/24",
+					},
+					Priority: 2,
 					Containers: []config.ContainerIP{
 						{
 							IP:        "172.18.201.11",

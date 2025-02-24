@@ -65,7 +65,8 @@ ipam:
     bridgeModeNetworks:
       - name: net1
         hostInterfaceName: docker-net1
-        cidr: 172\.18\.100\.0/24
+        cidr:
+          v4: 172\.18\.100\.0/24
         priority: 1
         containers:
           - ip: 172\.18\.100\.11
@@ -78,7 +79,8 @@ ipam:
               container: c2
       - name: net2
         hostInterfaceName: docker-net2
-        cidr: 172\.18\.101\.0/24
+        cidr:
+          v4: 172\.18\.101\.0/24
         priority: 1
         containers:
           - ip: 172\.18\.101\.21
@@ -138,7 +140,8 @@ ipam:
     bridgeModeNetworks:
       - name: net1
         hostInterfaceName: docker-net1
-        cidr: 172\.18\.100\.0/24
+        cidr:
+          v4: 172\.18\.100\.0/24
         priority: 1
         containers:
           - ip: 172\.18\.100\.11
@@ -822,7 +825,8 @@ ipam:
     bridgeModeNetworks:
       - name: net1
         hostInterfaceName: docker-net1
-        cidr: 172\.18\.100\.0/24
+        cidr:
+          v4: 172\.18\.100\.0/24
         priority: 1
         containers:
           - ip: 172\.18\.100\.11
@@ -835,7 +839,8 @@ ipam:
               container: c2
       - name: net2
         hostInterfaceName: docker-net2
-        cidr: 172\.18\.101\.0/24
+        cidr:
+          v4: 172\.18\.101\.0/24
         priority: 1
         containers:
           - ip: 172\.18\.101\.21

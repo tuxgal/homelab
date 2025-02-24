@@ -103,7 +103,8 @@ ipam:
     bridgeModeNetworks:
       - name: group1-bridge
         hostInterfaceName: docker-grp1
-        cidr: 172.18.18.0/24
+        cidr:
+          v4: 172.18.18.0/24
         priority: 1
         containers:
           - ip: 172.18.18.11
@@ -116,7 +117,8 @@ ipam:
               container: ct2
       - name: group2-bridge
         hostInterfaceName: docker-grp2
-        cidr: 172.18.19.0/24
+        cidr:
+          v4: 172.18.19.0/24
         priority: 1
         containers:
           - ip: 172.18.19.11
@@ -125,7 +127,8 @@ ipam:
               container: ct3
       - name: group3-bridge
         hostInterfaceName: docker-grp3
-        cidr: 172.18.20.0/24
+        cidr:
+          v4: 172.18.20.0/24
         priority: 1
         containers:
           - ip: 172.18.20.11
@@ -134,7 +137,8 @@ ipam:
               container: ct4
       - name: common-bridge
         hostInterfaceName: docker-cmn
-        cidr: 172.18.30.0/24
+        cidr:
+          v4: 172.18.30.0/24
         priority: 2
         containers:
           - ip: 172.18.30.11
@@ -535,8 +539,10 @@ ignore:
 						{
 							Name:              "group1-bridge",
 							HostInterfaceName: "docker-grp1",
-							CIDR:              "172.18.18.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.18.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.18.11",
@@ -557,8 +563,10 @@ ignore:
 						{
 							Name:              "group2-bridge",
 							HostInterfaceName: "docker-grp2",
-							CIDR:              "172.18.19.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.19.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.19.11",
@@ -572,8 +580,10 @@ ignore:
 						{
 							Name:              "group3-bridge",
 							HostInterfaceName: "docker-grp3",
-							CIDR:              "172.18.20.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.20.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.20.11",
@@ -587,8 +597,10 @@ ignore:
 						{
 							Name:              "common-bridge",
 							HostInterfaceName: "docker-cmn",
-							CIDR:              "172.18.30.0/24",
-							Priority:          2,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.30.0/24",
+							},
+							Priority: 2,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.30.11",
@@ -1496,8 +1508,10 @@ var buildDeploymentFromConfigsPathTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.11",
@@ -1518,8 +1532,10 @@ var buildDeploymentFromConfigsPathTests = []struct {
 						{
 							Name:              "net2",
 							HostInterfaceName: "docker-net2",
-							CIDR:              "172.18.101.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.101.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.101.21",
@@ -1533,8 +1549,10 @@ var buildDeploymentFromConfigsPathTests = []struct {
 						{
 							Name:              "net-common",
 							HostInterfaceName: "docker-cmn",
-							CIDR:              "172.19.200.0/24",
-							Priority:          2,
+							CIDR: config.NetworkCIDR{
+								V4: "172.19.200.0/24",
+							},
+							Priority: 2,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.19.200.201",
@@ -1897,14 +1915,18 @@ var buildDeploymentFromConfigStringerTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 						},
 						{
 							Name:              "net2",
 							HostInterfaceName: "docker-net2",
-							CIDR:              "172.18.101.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.101.0/24",
+							},
+							Priority: 1,
 						},
 					},
 					ContainerModeNetworks: []config.ContainerModeNetwork{
@@ -2654,8 +2676,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 					BridgeModeNetworks: []config.BridgeModeNetwork{
 						{
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 						},
 					},
 				},
@@ -2675,14 +2699,18 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 						},
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1-2",
-							CIDR:              "172.18.101.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.101.0/24",
+							},
+							Priority: 1,
 						},
 					},
 				},
@@ -2700,8 +2728,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 				Networks: config.Networks{
 					BridgeModeNetworks: []config.BridgeModeNetwork{
 						{
-							Name:     "net1",
-							CIDR:     "172.18.100.0/24",
+							Name: "net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
 							Priority: 1,
 						},
 					},
@@ -2722,14 +2752,18 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 						},
 						{
 							Name:              "net2",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.101.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.101.0/24",
+							},
+							Priority: 1,
 						},
 					},
 				},
@@ -2749,7 +2783,9 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
 						},
 					},
 				},
@@ -2775,7 +2811,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 				},
 			},
 		},
-		want: `CIDR  of network net1 is invalid, reason: netip\.ParsePrefix\(""\): no '/'`,
+		want: `v4 CIDR  of network net1 is invalid, reason: netip\.ParsePrefix\(""\): no '/'`,
 	},
 	{
 		name: "Invalid CIDR - Unparsable",
@@ -2789,14 +2825,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "garbage-cidr",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "garbage-cidr",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR garbage-cidr of network net1 is invalid, reason: netip\.ParsePrefix\("garbage-cidr"\): no '/'`,
+		want: `v4 CIDR garbage-cidr of network net1 is invalid, reason: netip\.ParsePrefix\("garbage-cidr"\): no '/'`,
 	},
 	{
 		name: "Invalid CIDR - Missing /",
@@ -2810,14 +2848,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.16",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.16",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 172\.18\.100\.16 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.100\.16"\): no '/'`,
+		want: `v4 CIDR 172\.18\.100\.16 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.100\.16"\): no '/'`,
 	},
 	{
 		name: "Invalid CIDR - Wrong Prefix Length",
@@ -2831,14 +2871,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/33",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/33",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 172\.18\.100\.0/33 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.100\.0/33"\): prefix length out of range`,
+		want: `v4 CIDR 172\.18\.100\.0/33 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.100\.0/33"\): prefix length out of range`,
 	},
 	{
 		name: "Invalid CIDR - IPv6",
@@ -2852,14 +2894,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "2002::1234:abcd:ffff:c0a8:101/64",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "2002::1234:abcd:ffff:c0a8:101/64",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 2002::1234:abcd:ffff:c0a8:101/64 of network net1 is not an IPv4 subnet CIDR`,
+		want: `v4 CIDR 2002::1234:abcd:ffff:c0a8:101/64 of network net1 is not an IPv4 subnet CIDR`,
 	},
 	{
 		name: "Invalid CIDR - Octets Out Of Range",
@@ -2873,14 +2917,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.260.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.260.0/24",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 172\.18\.260\.0/24 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.260\.0/24"\): ParseAddr\("172\.18\.260\.0"\): IPv4 field has value >255`,
+		want: `v4 CIDR 172\.18\.260\.0/24 of network net1 is invalid, reason: netip\.ParsePrefix\("172\.18\.260\.0/24"\): ParseAddr\("172\.18\.260\.0"\): IPv4 field has value >255`,
 	},
 	{
 		name: "Invalid CIDR - Not A Network Address",
@@ -2894,14 +2940,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.1/25",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.1/25",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 172\.18\.100\.1/25 of network net1 is not the same as the network address 172\.18\.100\.0/25`,
+		want: `v4 CIDR 172\.18\.100\.1/25 of network net1 is not the same as the network address 172\.18\.100\.0/25`,
 	},
 	{
 		name: "Invalid CIDR - Long Prefix 31",
@@ -2915,14 +2963,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/31",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/31",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 172\.18\.100\.0/31 of network net1 \(prefix length: 31\) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations`,
+		want: `v4 CIDR 172\.18\.100\.0/31 of network net1 \(prefix length: 31\) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations`,
 	},
 	{
 		name: "Invalid CIDR - Long Prefix 32",
@@ -2936,14 +2986,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/32",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/32",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 172\.18\.100\.0/32 of network net1 \(prefix length: 32\) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations`,
+		want: `v4 CIDR 172\.18\.100\.0/32 of network net1 \(prefix length: 32\) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations`,
 	},
 	{
 		name: "Non-RFC1918 CIDR - Public IPv4",
@@ -2957,14 +3009,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "11.12.13.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "11.12.13.0/24",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 11\.12\.13\.0/24 of network net1 is not within the RFC1918 private address space`,
+		want: `v4 CIDR 11\.12\.13\.0/24 of network net1 is not within the RFC1918 private address space`,
 	},
 	{
 		name: "Non-RFC1918 CIDR - Link Local",
@@ -2978,14 +3032,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "169.254.10.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "169.254.10.0/24",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 169\.254\.10\.0/24 of network net1 is not within the RFC1918 private address space`,
+		want: `v4 CIDR 169\.254\.10\.0/24 of network net1 is not within the RFC1918 private address space`,
 	},
 	{
 		name: "Non-RFC1918 CIDR - Multicast",
@@ -2999,14 +3055,16 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "224.0.0.0/26",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "224.0.0.0/26",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 224\.0\.0\.0/26 of network net1 is not within the RFC1918 private address space`,
+		want: `v4 CIDR 224\.0\.0\.0/26 of network net1 is not within the RFC1918 private address space`,
 	},
 	{
 		name: "Overlapping CIDR",
@@ -3020,20 +3078,24 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 						},
 						{
 							Name:              "net2",
 							HostInterfaceName: "docker-net2",
-							CIDR:              "172.18.0.0/16",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.0.0/16",
+							},
+							Priority: 1,
 						},
 					},
 				},
 			},
 		},
-		want: `CIDR 172\.18\.0\.0/16 of network net2 overlaps with CIDR 172\.18\.100\.0/24 of network net1`,
+		want: `v4 CIDR 172\.18\.0\.0/16 of network net2 overlaps with v4 CIDR 172\.18\.100\.0/24 of network net1`,
 	},
 	{
 		name: "Bridge Mode Network Invalid Container Reference - Empty Group",
@@ -3047,8 +3109,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.11",
@@ -3076,8 +3140,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.11",
@@ -3105,8 +3171,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "garbage-ip",
@@ -3135,8 +3203,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100",
@@ -3165,8 +3235,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.1.2.3.4",
@@ -3195,8 +3267,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.101.2",
@@ -3211,7 +3285,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 				},
 			},
 		},
-		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have an IP 172\.18\.101\.2 that does not belong to the network CIDR 172\.18\.100\.0/24`,
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have an IP 172\.18\.101\.2 that does not belong to the network v4 CIDR 172\.18\.100\.0/24`,
 	},
 	{
 		name: "Container IP same as Network Address",
@@ -3225,8 +3299,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.0",
@@ -3255,8 +3331,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.1",
@@ -3285,8 +3363,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.2",
@@ -3322,8 +3402,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.2",
@@ -3373,8 +3455,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.2",
@@ -3388,8 +3472,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net2",
 							HostInterfaceName: "docker-net2",
-							CIDR:              "172.18.101.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.101.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.101.2",
@@ -3468,8 +3554,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 						},
 					},
 					ContainerModeNetworks: []config.ContainerModeNetwork{
@@ -3679,8 +3767,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 						{
 							Name:              "net1",
 							HostInterfaceName: "docker-net1",
-							CIDR:              "172.18.100.0/24",
-							Priority:          1,
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
 							Containers: []config.ContainerIP{
 								{
 									IP: "172.18.100.2",

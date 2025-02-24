@@ -114,9 +114,14 @@ type Networks struct {
 type BridgeModeNetwork struct {
 	Name              string        `yaml:"name,omitempty" json:"name,omitempty"`
 	HostInterfaceName string        `yaml:"hostInterfaceName,omitempty" json:"hostInterfaceName,omitempty"`
-	CIDR              string        `yaml:"cidr,omitempty" json:"cidr,omitempty"`
+	CIDR              NetworkCIDR   `yaml:"cidr,omitempty" json:"cidr,omitempty"`
 	Priority          int           `yaml:"priority,omitempty" json:"priority,omitempty"`
 	Containers        []ContainerIP `yaml:"containers,omitempty" json:"containers,omitempty"`
+}
+
+// NetworkCIDR represents the subnet CIDR of the bridge mode network.
+type NetworkCIDR struct {
+	V4 string `yaml:"v4,omitempty" json:"v4,omitempty"`
 }
 
 // ContainerModeNetwork represents a container network meant to attach a

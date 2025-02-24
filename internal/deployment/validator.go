@@ -325,26 +325,26 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 		}
 
 		hostInterfaces[n.HostInterfaceName] = struct{}{}
-		prefix, err := netip.ParsePrefix(n.CIDR)
+		prefix, err := netip.ParsePrefix(n.CIDR.V4)
 		if err != nil {
-			return nil, nil, fmt.Errorf("CIDR %s of network %s is invalid, reason: %w", n.CIDR, n.Name, err)
+			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s is invalid, reason: %w", n.CIDR.V4, n.Name, err)
 		}
 		netAddr := prefix.Addr()
 		if !netAddr.Is4() {
-			return nil, nil, fmt.Errorf("CIDR %s of network %s is not an IPv4 subnet CIDR", n.CIDR, n.Name)
+			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s is not an IPv4 subnet CIDR", n.CIDR.V4, n.Name)
 		}
 		if masked := prefix.Masked(); masked.Addr() != netAddr {
-			return nil, nil, fmt.Errorf("CIDR %s of network %s is not the same as the network address %s", n.CIDR, n.Name, masked)
+			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s is not the same as the network address %s", n.CIDR.V4, n.Name, masked)
 		}
 		if prefixLen := prefix.Bits(); prefixLen > 30 {
-			return nil, nil, fmt.Errorf("CIDR %s of network %s (prefix length: %d) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations", n.CIDR, n.Name, prefixLen)
+			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s (prefix length: %d) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations", n.CIDR.V4, n.Name, prefixLen)
 		}
 		if !netAddr.IsPrivate() {
-			return nil, nil, fmt.Errorf("CIDR %s of network %s is not within the RFC1918 private address space", n.CIDR, n.Name)
+			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s is not within the RFC1918 private address space", n.CIDR.V4, n.Name)
 		}
 		for pre, preNet := range prefixes {
 			if prefix.Overlaps(pre) {
-				return nil, nil, fmt.Errorf("CIDR %s of network %s overlaps with CIDR %s of network %s", n.CIDR, n.Name, pre, preNet)
+				return nil, nil, fmt.Errorf("v4 CIDR %s of network %s overlaps with v4 CIDR %s of network %s", n.CIDR.V4, n.Name, pre, preNet)
 			}
 		}
 		prefixes[prefix] = n.Name
@@ -371,7 +371,7 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s has invalid IP %s, reason: %w", ct.Group, ct.Container, n.Name, ip, err)
 			}
 			if !prefix.Contains(caddr) {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s that does not belong to the network CIDR %s", ct.Group, ct.Container, n.Name, ip, prefix)
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s that does not belong to the network v4 CIDR %s", ct.Group, ct.Container, n.Name, ip, prefix)
 			}
 			if caddr.Compare(netAddr) == 0 {
 				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the network address %s", ct.Group, ct.Container, n.Name, ip, netAddr)
