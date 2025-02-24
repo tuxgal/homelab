@@ -1,9 +1,10 @@
 module github.com/tuxgal/homelab
 
 go 1.22.4
+toolchain go1.23.6
 
 require (
-	github.com/TwiN/deepmerge v0.2.1
+	github.com/TwiN/deepmerge v0.2.2
 	github.com/docker/docker v27.4.0+incompatible
 	github.com/docker/go-connections v0.5.0
 	github.com/docker/go-units v0.5.0
