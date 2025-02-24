@@ -21,8 +21,8 @@ type Network struct {
 type bridgeModeNetworkInfo struct {
 	priority          int
 	hostInterfaceName string
-	cidr              netip.Prefix
-	gateway           netip.Addr
+	v4CIDR            netip.Prefix
+	v4Gateway         netip.Addr
 }
 
 type containerModeNetworkInfo struct {
@@ -120,8 +120,8 @@ func (n *Network) createOptions() dnetwork.CreateOptions {
 			Driver: "default",
 			Config: []dnetwork.IPAMConfig{
 				{
-					Subnet:  n.bridgeModeInfo.cidr.String(),
-					Gateway: n.bridgeModeInfo.gateway.String(),
+					Subnet:  n.bridgeModeInfo.v4CIDR.String(),
+					Gateway: n.bridgeModeInfo.v4Gateway.String(),
 				},
 			},
 		},
@@ -132,7 +132,7 @@ func (n *Network) createOptions() dnetwork.CreateOptions {
 		Options: map[string]string{
 			"com.docker.network.bridge.enable_icc":           "true",
 			"com.docker.network.bridge.enable_ip_masquerade": "true",
-			"com.docker.network.bridge.host_binding_ipv4":    n.bridgeModeInfo.gateway.String(),
+			"com.docker.network.bridge.host_binding_ipv4":    n.bridgeModeInfo.v4Gateway.String(),
 			"com.docker.network.bridge.name":                 n.bridgeModeInfo.hostInterfaceName,
 			"com.docker.network.bridge.mtu":                  "1500",
 		},

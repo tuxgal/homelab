@@ -302,7 +302,7 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 	networks := NetworkMap{}
 	hostInterfaces := utils.StringSet{}
 	bridgeModeNetworks := conf.Networks.BridgeModeNetworks
-	prefixes := make(map[netip.Prefix]string)
+	v4Prefixes := make(map[netip.Prefix]string)
 	containerEndpoints := make(map[config.ContainerReference]networkEndpointList)
 	allBridgeModeContainers := make(map[config.ContainerReference]struct{})
 
@@ -325,35 +325,35 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 		}
 
 		hostInterfaces[n.HostInterfaceName] = struct{}{}
-		prefix, err := netip.ParsePrefix(n.CIDR.V4)
+		v4Prefix, err := netip.ParsePrefix(n.CIDR.V4)
 		if err != nil {
 			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s is invalid, reason: %w", n.CIDR.V4, n.Name, err)
 		}
-		netAddr := prefix.Addr()
-		if !netAddr.Is4() {
+		v4NetAddr := v4Prefix.Addr()
+		if !v4NetAddr.Is4() {
 			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s is not an IPv4 subnet CIDR", n.CIDR.V4, n.Name)
 		}
-		if masked := prefix.Masked(); masked.Addr() != netAddr {
+		if masked := v4Prefix.Masked(); masked.Addr() != v4NetAddr {
 			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s is not the same as the network address %s", n.CIDR.V4, n.Name, masked)
 		}
-		if prefixLen := prefix.Bits(); prefixLen > 30 {
+		if prefixLen := v4Prefix.Bits(); prefixLen > 30 {
 			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s (prefix length: %d) cannot have a prefix length more than 30 which makes the network unusable for container IP address allocations", n.CIDR.V4, n.Name, prefixLen)
 		}
-		if !netAddr.IsPrivate() {
+		if !v4NetAddr.IsPrivate() {
 			return nil, nil, fmt.Errorf("v4 CIDR %s of network %s is not within the RFC1918 private address space", n.CIDR.V4, n.Name)
 		}
-		for pre, preNet := range prefixes {
-			if prefix.Overlaps(pre) {
+		for pre, preNet := range v4Prefixes {
+			if v4Prefix.Overlaps(pre) {
 				return nil, nil, fmt.Errorf("v4 CIDR %s of network %s overlaps with v4 CIDR %s of network %s", n.CIDR.V4, n.Name, pre, preNet)
 			}
 		}
-		prefixes[prefix] = n.Name
-		gatewayAddr := netAddr.Next()
+		v4Prefixes[v4Prefix] = n.Name
+		v4GatewayAddr := v4NetAddr.Next()
 		bmn := newBridgeModeNetwork(n.Name, n.Priority, &bridgeModeNetworkInfo{
 			priority:          n.Priority,
 			hostInterfaceName: n.HostInterfaceName,
-			cidr:              prefix,
-			gateway:           gatewayAddr,
+			v4CIDR:            v4Prefix,
+			v4Gateway:         v4GatewayAddr,
 		})
 		networks[n.Name] = bmn
 
@@ -370,14 +370,14 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 			if err != nil {
 				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s has invalid IP %s, reason: %w", ct.Group, ct.Container, n.Name, ip, err)
 			}
-			if !prefix.Contains(caddr) {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s that does not belong to the network v4 CIDR %s", ct.Group, ct.Container, n.Name, ip, prefix)
+			if !v4Prefix.Contains(caddr) {
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s that does not belong to the network v4 CIDR %s", ct.Group, ct.Container, n.Name, ip, v4Prefix)
 			}
-			if caddr.Compare(netAddr) == 0 {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the network address %s", ct.Group, ct.Container, n.Name, ip, netAddr)
+			if caddr.Compare(v4NetAddr) == 0 {
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the network address %s", ct.Group, ct.Container, n.Name, ip, v4NetAddr)
 			}
-			if caddr.Compare(gatewayAddr) == 0 {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the gateway address %s", ct.Group, ct.Container, n.Name, ip, gatewayAddr)
+			if caddr.Compare(v4GatewayAddr) == 0 {
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the gateway address %s", ct.Group, ct.Container, n.Name, ip, v4GatewayAddr)
 			}
 			if _, found := containers[ct]; found {
 				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} cannot have multiple endpoints in network %s", ct.Group, ct.Container, n.Name)

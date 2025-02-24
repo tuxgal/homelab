@@ -119,9 +119,10 @@ type BridgeModeNetwork struct {
 	Containers        []ContainerIPInfo `yaml:"containers,omitempty" json:"containers,omitempty"`
 }
 
-// NetworkCIDR represents the subnet CIDR of the bridge mode network.
+// NetworkCIDR represents the subnet CIDRs of the bridge mode network.
 type NetworkCIDR struct {
 	V4 string `yaml:"v4,omitempty" json:"v4,omitempty"`
+	V6 string `yaml:"v6,omitempty" json:"v6,omitempty"`
 }
 
 // ContainerModeNetwork represents a container network meant to attach a
