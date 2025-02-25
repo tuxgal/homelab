@@ -688,12 +688,21 @@ func (c *Container) nonBindMounts() []dmount.Mount {
 func (c *Container) primaryNetworkEndpoint() map[string]*dnetwork.EndpointSettings {
 	res := make(map[string]*dnetwork.EndpointSettings)
 	if len(c.endpoints) > 0 && c.endpoints[0].network.mode == NetworkModeBridge {
-		res[c.endpoints[0].network.Name()] = &dnetwork.EndpointSettings{
+		es := &dnetwork.EndpointSettings{
 			IPAMConfig: &dnetwork.EndpointIPAMConfig{
 				IPv4Address: c.endpoints[0].ipv4,
-				IPv6Address: c.endpoints[0].ipv6,
 			},
+			Gateway:     c.endpoints[0].network.bridgeModeInfo.v4Gateway.String(),
+			IPAddress:   c.endpoints[0].ipv4,
+			IPPrefixLen: c.endpoints[0].network.bridgeModeInfo.v4CIDR.Bits(),
 		}
+		if c.endpoints[0].ipv6 != "" {
+			es.IPAMConfig.IPv6Address = c.endpoints[0].ipv6
+			es.IPv6Gateway = c.endpoints[0].network.bridgeModeInfo.v6Gateway.String()
+			es.GlobalIPv6Address = c.endpoints[0].ipv6
+			es.GlobalIPv6PrefixLen = c.endpoints[0].network.bridgeModeInfo.v6CIDR.Bits()
+		}
+		res[c.endpoints[0].network.Name()] = es
 	}
 	if len(res) == 0 {
 		return nil
