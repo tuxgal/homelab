@@ -105,10 +105,12 @@ ipam:
         hostInterfaceName: docker-grp1
         cidr:
           v4: 172.18.18.0/24
+          v6: fd99:172:18:18::/64
         priority: 1
         containers:
           - ip:
               v4: 172.18.18.11
+              v6: fd99:172:18:18::11
             container:
               group: group1
               container: ct1
@@ -143,10 +145,12 @@ ipam:
         hostInterfaceName: docker-cmn
         cidr:
           v4: 172.18.30.0/24
+          v6: fd99:172:18:30::/64
         priority: 2
         containers:
           - ip:
               v4: 172.18.30.11
+              v6: fd99:172:18:30::11
             container:
               group: group1
               container: ct1
@@ -157,6 +161,7 @@ ipam:
               container: ct2
           - ip:
               v4: 172.18.30.13
+              v6: fd99:172:18:30::13
             container:
               group: group2
               container: ct3
@@ -548,12 +553,14 @@ ignore:
 							HostInterfaceName: "docker-grp1",
 							CIDR: config.NetworkCIDR{
 								V4: "172.18.18.0/24",
+								V6: "fd99:172:18:18::/64",
 							},
 							Priority: 1,
 							Containers: []config.ContainerIPInfo{
 								{
 									IP: config.ContainerIP{
 										IPv4: "172.18.18.11",
+										IPv6: "fd99:172:18:18::11",
 									},
 									Container: config.ContainerReference{
 										Group:     "group1",
@@ -614,12 +621,14 @@ ignore:
 							HostInterfaceName: "docker-cmn",
 							CIDR: config.NetworkCIDR{
 								V4: "172.18.30.0/24",
+								V6: "fd99:172:18:30::/64",
 							},
 							Priority: 2,
 							Containers: []config.ContainerIPInfo{
 								{
 									IP: config.ContainerIP{
 										IPv4: "172.18.30.11",
+										IPv6: "fd99:172:18:30::11",
 									},
 									Container: config.ContainerReference{
 										Group:     "group1",
@@ -638,6 +647,7 @@ ignore:
 								{
 									IP: config.ContainerIP{
 										IPv4: "172.18.30.13",
+										IPv6: "fd99:172:18:30::13",
 									},
 									Container: config.ContainerReference{
 										Group:     "group2",
@@ -1216,6 +1226,7 @@ ignore:
 						"group1-bridge": {
 							IPAMConfig: &dnetwork.EndpointIPAMConfig{
 								IPv4Address: "172.18.18.11",
+								IPv6Address: "fd99:172:18:18::11",
 							},
 						},
 					},
