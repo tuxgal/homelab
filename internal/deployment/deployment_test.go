@@ -309,6 +309,22 @@ containers:
           proto: udp
           hostIp: 127.0.0.1
           hostPort: $$MY_HOST_PORT_2$$
+        - containerPort: 5353
+          proto: tcp
+          hostIp: 0.0.0.0
+          hostPort: 53
+        - containerPort: 5353
+          proto: tcp
+          hostIp: '::'
+          hostPort: 53
+        - containerPort: 5353
+          proto: udp
+          hostIp: 0.0.0.0
+          hostPort: 53
+        - containerPort: 5353
+          proto: udp
+          hostIp: '::'
+          hostPort: 53
     security:
       privileged: true
       sysctls:
@@ -914,6 +930,30 @@ ignore:
 								HostIP:        "127.0.0.1",
 								HostPort:      "6789",
 							},
+							{
+								ContainerPort: "5353",
+								Protocol:      "tcp",
+								HostIP:        "0.0.0.0",
+								HostPort:      "53",
+							},
+							{
+								ContainerPort: "5353",
+								Protocol:      "tcp",
+								HostIP:        "::",
+								HostPort:      "53",
+							},
+							{
+								ContainerPort: "5353",
+								Protocol:      "udp",
+								HostIP:        "0.0.0.0",
+								HostPort:      "53",
+							},
+							{
+								ContainerPort: "5353",
+								Protocol:      "udp",
+								HostIP:        "::",
+								HostPort:      "53",
+							},
 						},
 					},
 					Security: config.ContainerSecurity{
@@ -1066,6 +1106,8 @@ ignore:
 					User:       "55555:44444",
 					ExposedPorts: nat.PortSet{
 						"4321/tcp": struct{}{},
+						"5353/tcp": struct{}{},
+						"5353/udp": struct{}{},
 						"8765/udp": struct{}{},
 					},
 					Tty: true,
@@ -1125,6 +1167,26 @@ ignore:
 							{
 								HostIP:   "10.76.77.78",
 								HostPort: "2122",
+							},
+						},
+						"5353/tcp": []nat.PortBinding{
+							{
+								HostIP:   "0.0.0.0",
+								HostPort: "53",
+							},
+							{
+								HostIP:   "::",
+								HostPort: "53",
+							},
+						},
+						"5353/udp": []nat.PortBinding{
+							{
+								HostIP:   "0.0.0.0",
+								HostPort: "53",
+							},
+							{
+								HostIP:   "::",
+								HostPort: "53",
 							},
 						},
 						"8765/udp": []nat.PortBinding{

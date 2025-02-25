@@ -544,11 +544,18 @@ func (c *Container) publishedPorts() (nat.PortMap, nat.PortSet) {
 	pSet := make(nat.PortSet)
 	for _, p := range c.config.Network.PublishedPorts {
 		natPort := nat.Port(fmt.Sprintf("%s/%s", p.ContainerPort, p.Protocol))
-		pMap[natPort] = []nat.PortBinding{
-			{
+		if pm, found := pMap[natPort]; found {
+			pMap[natPort] = append(pm, nat.PortBinding{
 				HostIP:   p.HostIP,
 				HostPort: p.HostPort,
-			},
+			})
+		} else {
+			pMap[natPort] = []nat.PortBinding{
+				{
+					HostIP:   p.HostIP,
+					HostPort: p.HostPort,
+				},
+			}
 		}
 		pSet[natPort] = struct{}{}
 	}
