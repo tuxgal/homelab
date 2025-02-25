@@ -101,8 +101,8 @@ func (n *Network) Delete(ctx context.Context, dc *docker.Client) (bool, error) {
 	return true, nil
 }
 
-func (n *Network) connectContainer(ctx context.Context, dc *docker.Client, containerName, ip string) error {
-	return dc.ConnectContainerToBridgeModeNetwork(ctx, containerName, n.Name(), ip)
+func (n *Network) connectContainer(ctx context.Context, dc *docker.Client, containerName, ipv4 string, ipv6 string) error {
+	return dc.ConnectContainerToBridgeModeNetwork(ctx, containerName, n.Name(), ipv4, ipv6)
 }
 
 //nolint:nolintlint,unused // TODO: Remove this after this function is used.

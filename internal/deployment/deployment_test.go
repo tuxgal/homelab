@@ -1538,6 +1538,7 @@ var buildDeploymentFromConfigsPathTests = []struct {
 								{
 									IP: config.ContainerIP{
 										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:100::11",
 									},
 									Container: config.ContainerReference{
 										Group:     "g1",
@@ -1586,6 +1587,7 @@ var buildDeploymentFromConfigsPathTests = []struct {
 								{
 									IP: config.ContainerIP{
 										IPv4: "172.19.200.201",
+										IPv6: "fd99:172:19:200::201",
 									},
 									Container: config.ContainerReference{
 										Group:     "g1",
@@ -1604,6 +1606,7 @@ var buildDeploymentFromConfigsPathTests = []struct {
 								{
 									IP: config.ContainerIP{
 										IPv4: "172.19.200.203",
+										IPv6: "fd99:172:19:200::203",
 									},
 									Container: config.ContainerReference{
 										Group:     "g2",
@@ -1752,6 +1755,7 @@ var buildDeploymentFromConfigsPathTests = []struct {
 						"net1": {
 							IPAMConfig: &dnetwork.EndpointIPAMConfig{
 								IPv4Address: "172.18.100.11",
+								IPv6Address: "fd99:172:18:100::11",
 							},
 						},
 					},
@@ -3430,7 +3434,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `v6 CIDR fd99:1234:5678:90ab::/64 of network net2 overlaps with v6 CIDR fd99:1234:5678:90ab::/64 of network net1`,
 	},
 	{
-		name: "Bridge Mode Network Invalid Container Reference - Empty Group",
+		name: "Bridge Mode Network v4 IP Invalid Container Reference - Empty Group",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3463,7 +3467,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `container IP config within network net1 has invalid container reference, reason: container reference cannot have an empty group name`,
 	},
 	{
-		name: "Bridge Mode Network Invalid Container Reference - Empty Container",
+		name: "Bridge Mode Network v4 IP Invalid Container Reference - Empty Container",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3496,7 +3500,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `container IP config within network net1 has invalid container reference, reason: container reference cannot have an empty container name`,
 	},
 	{
-		name: "Invalid Container IP - Unparsable",
+		name: "Invalid Container v4 IP - Unparsable",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3527,10 +3531,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 				},
 			},
 		},
-		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid IP garbage-ip, reason: ParseAddr\("garbage-ip"\): unable to parse IP`,
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid v4 IP garbage-ip, reason: ParseAddr\("garbage-ip"\): unable to parse IP`,
 	},
 	{
-		name: "Invalid Container IP - Too Short",
+		name: "Invalid Container v4 IP - Too Short",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3561,10 +3565,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 				},
 			},
 		},
-		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid IP 172\.18\.100, reason: ParseAddr\("172\.18\.100"\): IPv4 address too short`,
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid v4 IP 172\.18\.100, reason: ParseAddr\("172\.18\.100"\): IPv4 address too short`,
 	},
 	{
-		name: "Invalid Container IP - Too Long",
+		name: "Invalid Container v4 IP - Too Long",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3595,10 +3599,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 				},
 			},
 		},
-		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid IP 172\.18\.100\.1\.2\.3\.4, reason: ParseAddr\("172\.18\.100\.1\.2\.3\.4"\): IPv4 address too long`,
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid v4 IP 172\.18\.100\.1\.2\.3\.4, reason: ParseAddr\("172\.18\.100\.1\.2\.3\.4"\): IPv4 address too long`,
 	},
 	{
-		name: "Container IP Not Within Network CIDR",
+		name: "Container v4 IP Not Within Network CIDR",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3629,10 +3633,10 @@ var buildDeploymentFromConfigErrorTests = []struct {
 				},
 			},
 		},
-		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have an IP 172\.18\.101\.2 that does not belong to the network v4 CIDR 172\.18\.100\.0/24`,
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have a v4 IP 172\.18\.101\.2 that does not belong to the network v4 CIDR 172\.18\.100\.0/24`,
 	},
 	{
-		name: "Container IP same as Network Address",
+		name: "Container v4 IP same as Network Address",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3666,7 +3670,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have an IP 172\.18\.100\.0 matching the network address 172\.18\.100\.0`,
 	},
 	{
-		name: "Container IP same as Gateway Address",
+		name: "Container v4 IP same as Gateway Address",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3700,7 +3704,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have an IP 172\.18\.100\.1 matching the gateway address 172\.18\.100\.1`,
 	},
 	{
-		name: "Multiple Endpoints For Same Container Within A Bridge Mode Network",
+		name: "Multiple v4 Endpoints For Same Container Within A Bridge Mode Network",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3743,7 +3747,7 @@ var buildDeploymentFromConfigErrorTests = []struct {
 		want: `container {Group:group1 Container:ct1} cannot have multiple endpoints in network net1`,
 	},
 	{
-		name: "Duplicate Container IPs",
+		name: "Duplicate v4 Container IPs",
 		config: config.Homelab{
 			Global: config.Global{
 				BaseDir: testhelpers.HomelabBaseDir(),
@@ -3802,6 +3806,440 @@ var buildDeploymentFromConfigErrorTests = []struct {
 			},
 		},
 		want: `IP 172\.18\.100\.2 of container {Group:group1 Container:ct4} is already in use by another container in network net1`,
+	},
+	{
+		name: "Bridge Mode Network v6 IP Invalid Container Reference - Empty Group",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:100::11",
+									},
+									Container: config.ContainerReference{
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container IP config within network net1 has invalid container reference, reason: container reference cannot have an empty group name`,
+	},
+	{
+		name: "Bridge Mode Network v6 IP Invalid Container Reference - Empty Container",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:100::11",
+									},
+									Container: config.ContainerReference{
+										Group: "g1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container IP config within network net1 has invalid container reference, reason: container reference cannot have an empty container name`,
+	},
+	{
+		name: "Invalid Container v6 IP - Unparsable",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "garbage-ip",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid v6 IP garbage-ip, reason: ParseAddr\("garbage-ip"\): unable to parse IP`,
+	},
+	{
+		name: "Container With v6 IP But Subnet with Only v4",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:100::11",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 specified a v6 IP address fd99:172:18:100::11 when the network has no v6 subnet CIDRs defined`,
+	},
+
+	{
+		name: "Invalid Container v6 IP - Too Short",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:100:1111:2222:3333",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid v6 IP fd99:172:18:100:1111:2222:3333, reason: ParseAddr\("fd99:172:18:100:1111:2222:3333"\): address string too short`,
+	},
+	{
+		name: "Invalid Container v6 IP - Too Long",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:100:1111:2222:3333:4444:5555",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 has invalid v6 IP fd99:172:18:100:1111:2222:3333:4444:5555, reason: ParseAddr\("fd99:172:18:100:1111:2222:3333:4444:5555"\): trailing garbage after address \(at \"5555\"\)`,
+	},
+	{
+		name: "Container v6 IP Not Within Network CIDR",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:101::11",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have a v6 IP fd99:172:18:101::11 that does not belong to the network v6 CIDR fd99:172:18:100::/64`,
+	},
+	{
+		name: "Container v6 IP same as Network Address",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:100::",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have an IP fd99:172:18:100:: matching the network address fd99:172:18:100::`,
+	},
+	{
+		name: "Container v6 IP same as Gateway Address",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.11",
+										IPv6: "fd99:172:18:100::1",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container {Group:group1 Container:ct1} endpoint in network net1 cannot have an IP fd99:172:18:100::1 matching the gateway address fd99:172:18:100::1`,
+	},
+	{
+		name: "Multiple v6 Endpoints For Same Container Within A Bridge Mode Network",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.2",
+										IPv6: "fd99:172:18:100::2",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.3",
+										IPv6: "fd99:172:18:100::3",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `container {Group:group1 Container:ct1} cannot have multiple endpoints in network net1`,
+	},
+	{
+		name: "Duplicate v6 Container IPs",
+		config: config.Homelab{
+			Global: config.Global{
+				BaseDir: testhelpers.HomelabBaseDir(),
+			},
+			IPAM: config.IPAM{
+				Networks: config.Networks{
+					BridgeModeNetworks: []config.BridgeModeNetwork{
+						{
+							Name:              "net1",
+							HostInterfaceName: "docker-net1",
+							CIDR: config.NetworkCIDR{
+								V4: "172.18.100.0/24",
+								V6: "fd99:172:18:100::/64",
+							},
+							Priority: 1,
+							Containers: []config.ContainerIPInfo{
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.2",
+										IPv6: "fd99:172:18:100::2",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct1",
+									},
+								},
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.3",
+										IPv6: "fd99:172:18:100::3",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct2",
+									},
+								},
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.4",
+										IPv6: "fd99:172:18:100::4",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct3",
+									},
+								},
+								{
+									IP: config.ContainerIP{
+										IPv4: "172.18.100.5",
+										IPv6: "fd99:172:18:100::2",
+									},
+									Container: config.ContainerReference{
+										Group:     "group1",
+										Container: "ct4",
+									},
+								},
+							},
+						},
+					},
+				},
+			},
+		},
+		want: `IP fd99:172:18:100::2 of container {Group:group1 Container:ct4} is already in use by another container in network net1`,
 	},
 	{
 		name: "Multiple Same Priority Bridge Mode Network Endpoints For Same Container",

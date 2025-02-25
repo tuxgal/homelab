@@ -236,11 +236,17 @@ func (d *Client) NetworkExists(ctx context.Context, networkName string) bool {
 	return err == nil && len(networks) > 0
 }
 
-func (d *Client) ConnectContainerToBridgeModeNetwork(ctx context.Context, containerName, networkName, ip string) error {
-	log(ctx).Debugf("Connecting container %s to network %s with IP %s ...", containerName, networkName, ip)
+func (d *Client) ConnectContainerToBridgeModeNetwork(ctx context.Context, containerName, networkName, ipv4 string, ipv6 string) error {
+	if ipv6 != "" {
+		log(ctx).Debugf("Connecting container %s to network %s with IP v4 %s and v6 %s ...", containerName, networkName, ipv4, ipv6)
+	} else {
+		log(ctx).Debugf("Connecting container %s to network %s with IP v4 %s ...", containerName, networkName, ipv4)
+	}
+
 	err := d.client.NetworkConnect(ctx, networkName, containerName, &dnetwork.EndpointSettings{
 		IPAMConfig: &dnetwork.EndpointIPAMConfig{
-			IPv4Address: ip,
+			IPv4Address: ipv4,
+			IPv6Address: ipv6,
 		},
 	})
 	if err != nil {

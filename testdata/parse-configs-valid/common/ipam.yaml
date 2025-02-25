@@ -10,6 +10,7 @@ ipam:
         containers:
           - ip:
               v4: 172.18.100.11
+              v6: fd99:172:18:100::11
             container:
               group: g1
               container: c1
@@ -38,6 +39,7 @@ ipam:
         containers:
           - ip:
               v4: 172.19.200.201
+              v6: fd99:172:19:200::201
             container:
               group: g1
               container: c1
@@ -48,6 +50,7 @@ ipam:
               container: c2
           - ip:
               v4: 172.19.200.203
+              v6: fd99:172:19:200::203
             container:
               group: g2
               container: c3

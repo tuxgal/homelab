@@ -34,6 +34,7 @@ type Container struct {
 type containerNetworkEndpoint struct {
 	network *Network
 	ipv4    string
+	ipv6    string
 }
 
 type containerDockerConfigs struct {
@@ -168,7 +169,11 @@ func (c *Container) startInternal(ctx context.Context, dc *docker.Client) error 
 			if err != nil {
 				return err
 			}
-			log(ctx).Debugf("Connecting container %s to network %s with IP v4 %s at the time of container creation ...", c.Name(), c.endpoints[0].network.Name(), c.endpoints[0].ipv4)
+			if c.endpoints[0].ipv6 != "" {
+				log(ctx).Debugf("Connecting container %s to network %s with IP v4 %s and IPv6 %s at the time of container creation ...", c.Name(), c.endpoints[0].network.Name(), c.endpoints[0].ipv4, c.endpoints[0].ipv6)
+			} else {
+				log(ctx).Debugf("Connecting container %s to network %s with IP v4 %s at the time of container creation ...", c.Name(), c.endpoints[0].network.Name(), c.endpoints[0].ipv4)
+			}
 		}
 	} else {
 		log(ctx).Warnf("Container %s has no network endpoints configured, this is uncommon!", c.Name())
@@ -191,7 +196,7 @@ func (c *Container) startInternal(ctx context.Context, dc *docker.Client) error 
 		if err != nil {
 			return err
 		}
-		err = ip.network.connectContainer(ctx, dc, c.Name(), ip.ipv4)
+		err = ip.network.connectContainer(ctx, dc, c.Name(), ip.ipv4, ip.ipv6)
 		if err != nil {
 			return err
 		}
@@ -686,6 +691,7 @@ func (c *Container) primaryNetworkEndpoint() map[string]*dnetwork.EndpointSettin
 		res[c.endpoints[0].network.Name()] = &dnetwork.EndpointSettings{
 			IPAMConfig: &dnetwork.EndpointIPAMConfig{
 				IPv4Address: c.endpoints[0].ipv4,
+				IPv6Address: c.endpoints[0].ipv6,
 			},
 		}
 	}

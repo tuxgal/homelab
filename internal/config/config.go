@@ -142,6 +142,7 @@ type ContainerIPInfo struct {
 // ContainerIP represents the IP information for a container.
 type ContainerIP struct {
 	IPv4 string `yaml:"v4,omitempty" json:"v4,omitempty"`
+	IPv6 string `yaml:"v6,omitempty" json:"v6,omitempty"`
 }
 
 // Host represents the host specific information.

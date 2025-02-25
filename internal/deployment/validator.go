@@ -362,12 +362,14 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 
 		var v6Prefix netip.Prefix
 		var v6GatewayAddr netip.Addr
+		var v6NetAddr netip.Addr
 		if n.CIDR.V6 != "" {
-			v6Prefix, err := netip.ParsePrefix(n.CIDR.V6)
+			var err error
+			v6Prefix, err = netip.ParsePrefix(n.CIDR.V6)
 			if err != nil {
 				return nil, nil, fmt.Errorf("v6 CIDR %s of network %s is invalid, reason: %w", n.CIDR.V6, n.Name, err)
 			}
-			v6NetAddr := v6Prefix.Addr()
+			v6NetAddr = v6Prefix.Addr()
 			if !v6NetAddr.Is6() {
 				return nil, nil, fmt.Errorf("v6 CIDR %s of network %s is not an IPv6 subnet CIDR", n.CIDR.V6, n.Name)
 			}
@@ -406,36 +408,60 @@ func validateIPAMConfig(ctx context.Context, conf *config.IPAM) (NetworkMap, map
 		containers := make(map[config.ContainerReference]struct{})
 		containerIPs := make(map[netip.Addr]struct{})
 		for _, cip := range n.Containers {
-			ipv4 := cip.IP.IPv4
 			ct := cip.Container
 			if err := validateContainerReference(&ct); err != nil {
 				return nil, nil, fmt.Errorf("container IP config within network %s has invalid container reference, reason: %w", n.Name, err)
 			}
 
-			caddr, err := netip.ParseAddr(ipv4)
+			ipv4 := cip.IP.IPv4
+			caddrv4, err := netip.ParseAddr(ipv4)
 			if err != nil {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s has invalid IP %s, reason: %w", ct.Group, ct.Container, n.Name, ipv4, err)
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s has invalid v4 IP %s, reason: %w", ct.Group, ct.Container, n.Name, ipv4, err)
 			}
-			if !v4Prefix.Contains(caddr) {
-				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s that does not belong to the network v4 CIDR %s", ct.Group, ct.Container, n.Name, ipv4, v4Prefix)
+			if !v4Prefix.Contains(caddrv4) {
+				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have a v4 IP %s that does not belong to the network v4 CIDR %s", ct.Group, ct.Container, n.Name, ipv4, v4Prefix)
 			}
-			if caddr.Compare(v4NetAddr) == 0 {
+			if caddrv4.Compare(v4NetAddr) == 0 {
 				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the network address %s", ct.Group, ct.Container, n.Name, ipv4, v4NetAddr)
 			}
-			if caddr.Compare(v4GatewayAddr) == 0 {
+			if caddrv4.Compare(v4GatewayAddr) == 0 {
 				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the gateway address %s", ct.Group, ct.Container, n.Name, ipv4, v4GatewayAddr)
 			}
+			if _, found := containerIPs[caddrv4]; found {
+				return nil, nil, fmt.Errorf("IP %s of container {Group:%s Container:%s} is already in use by another container in network %s", ipv4, ct.Group, ct.Container, n.Name)
+			}
+			containerIPs[caddrv4] = struct{}{}
+
+			ipv6 := cip.IP.IPv6
+			if ipv6 != "" {
+				caddrv6, err := netip.ParseAddr(ipv6)
+				if err != nil {
+					return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s has invalid v6 IP %s, reason: %w", ct.Group, ct.Container, n.Name, ipv6, err)
+				}
+				if n.CIDR.V6 == "" {
+					return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s specified a v6 IP address %s when the network has no v6 subnet CIDRs defined", ct.Group, ct.Container, n.Name, ipv6)
+				}
+				if !v6Prefix.Contains(caddrv6) {
+					return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have a v6 IP %s that does not belong to the network v6 CIDR %s", ct.Group, ct.Container, n.Name, ipv6, v6Prefix)
+				}
+				if caddrv6.Compare(v6NetAddr) == 0 {
+					return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the network address %s", ct.Group, ct.Container, n.Name, ipv6, v6NetAddr)
+				}
+				if caddrv6.Compare(v6GatewayAddr) == 0 {
+					return nil, nil, fmt.Errorf("container {Group:%s Container:%s} endpoint in network %s cannot have an IP %s matching the gateway address %s", ct.Group, ct.Container, n.Name, ipv6, v6GatewayAddr)
+				}
+				if _, found := containerIPs[caddrv6]; found {
+					return nil, nil, fmt.Errorf("IP %s of container {Group:%s Container:%s} is already in use by another container in network %s", ipv6, ct.Group, ct.Container, n.Name)
+				}
+				containerIPs[caddrv6] = struct{}{}
+			}
+
 			if _, found := containers[ct]; found {
 				return nil, nil, fmt.Errorf("container {Group:%s Container:%s} cannot have multiple endpoints in network %s", ct.Group, ct.Container, n.Name)
 			}
-			if _, found := containerIPs[caddr]; found {
-				return nil, nil, fmt.Errorf("IP %s of container {Group:%s Container:%s} is already in use by another container in network %s", ipv4, ct.Group, ct.Container, n.Name)
-			}
-
 			containers[ct] = struct{}{}
 			allBridgeModeContainers[ct] = struct{}{}
-			containerIPs[caddr] = struct{}{}
-			containerEndpoints[ct] = append(containerEndpoints[ct], newBridgeModeEndpoint(bmn, ipv4))
+			containerEndpoints[ct] = append(containerEndpoints[ct], newBridgeModeEndpoint(bmn, ipv4, ipv6))
 		}
 	}
 
@@ -651,8 +677,8 @@ func validateContainerReference(ref *config.ContainerReference) error {
 	return nil
 }
 
-func newBridgeModeEndpoint(network *Network, ipv4 string) *containerNetworkEndpoint {
-	return &containerNetworkEndpoint{network: network, ipv4: ipv4}
+func newBridgeModeEndpoint(network *Network, ipv4 string, ipv6 string) *containerNetworkEndpoint {
+	return &containerNetworkEndpoint{network: network, ipv4: ipv4, ipv6: ipv6}
 }
 
 func newContainerModeEndpoint(network *Network) *containerNetworkEndpoint {
