@@ -520,6 +520,28 @@ Creating container g1-c1
 Starting container g1-c1`,
 	},
 	{
+		name: "Homelab Command - Containers Start - One Container With Wait After Start Delay",
+		args: []string{
+			"containers",
+			"start",
+			"g1/c1",
+			"--configs-dir",
+			fmt.Sprintf("%s/testdata/start-cmd-with-wait-after-start-delay", testhelpers.Pwd()),
+		},
+		ctxInfo: &testutils.TestContextInfo{
+			DockerHost: fakedocker.NewFakeDockerHost(&fakedocker.FakeDockerHostInitInfo{
+				ValidImagesForPull: utils.StringSet{
+					"abc/xyz": {},
+				},
+			}),
+		},
+		want: `Pulling image: abc/xyz
+Created network net1
+Creating container g1-c1
+Starting container g1-c1
+Waiting for 1s after container startup of g1-c1`,
+	},
+	{
 		name: "Homelab Command - Groups Stop - All Groups",
 		args: []string{
 			"groups",

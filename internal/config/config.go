@@ -214,12 +214,13 @@ type ContainerMetadata struct {
 // ContainerLifecycle represents the lifecycle information for the
 // docker container.
 type ContainerLifecycle struct {
-	Order         int                    `yaml:"order,omitempty" json:"order,omitempty"`
-	StartPreHook  []string               `yaml:"startPreHook,omitempty" json:"startPreHook,omitempty"`
-	RestartPolicy ContainerRestartPolicy `yaml:"restartPolicy,omitempty" json:"restartPolicy,omitempty"`
-	AutoRemove    bool                   `yaml:"autoRemove,omitempty" json:"autoRemove,omitempty"`
-	StopSignal    string                 `yaml:"stopSignal,omitempty" json:"stopSignal,omitempty"`
-	StopTimeout   int                    `yaml:"stopTimeout,omitempty" json:"stopTimeout,omitempty"`
+	Order               int                    `yaml:"order,omitempty" json:"order,omitempty"`
+	StartPreHook        []string               `yaml:"startPreHook,omitempty" json:"startPreHook,omitempty"`
+	RestartPolicy       ContainerRestartPolicy `yaml:"restartPolicy,omitempty" json:"restartPolicy,omitempty"`
+	AutoRemove          bool                   `yaml:"autoRemove,omitempty" json:"autoRemove,omitempty"`
+	StopSignal          string                 `yaml:"stopSignal,omitempty" json:"stopSignal,omitempty"`
+	StopTimeout         int                    `yaml:"stopTimeout,omitempty" json:"stopTimeout,omitempty"`
+	WaitAfterStartDelay int                    `yaml:"waitAfterStartDelay,omitempty" json:"waitAfterStartDelay,omitempty"`
 }
 
 // ContainerUser represents the user and group information for the

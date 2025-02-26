@@ -1,0 +1,9 @@
+containers:
+  - info:
+      group: g1
+      container: c1
+    image:
+      image: abc/xyz
+    lifecycle:
+      order: 1
+      waitAfterStartDelay: 1

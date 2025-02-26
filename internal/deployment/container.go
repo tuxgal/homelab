@@ -205,7 +205,18 @@ func (c *Container) startInternal(ctx context.Context, dc *docker.Client) error 
 	// 7. Start the created container.
 	log(ctx).Infof("Starting container %s", c.Name())
 	err = dc.StartContainer(ctx, c.Name())
-	return err
+	if err != nil {
+		return err
+	}
+
+	delay := c.waitAfterStartDelay()
+	if delay != 0 {
+		wait := time.Duration(delay) * time.Second
+		log(ctx).Infof("Waiting for %v after container startup of %s", wait, c.Name())
+		time.Sleep(wait)
+	}
+
+	return nil
 }
 
 func (c *Container) stopInternal(ctx context.Context, dc *docker.Client) (bool, docker.ContainerState, error) {
@@ -511,6 +522,10 @@ func (c *Container) stopTimeout() *int {
 		return nil
 	}
 	return &t
+}
+
+func (c *Container) waitAfterStartDelay() int {
+	return c.config.Lifecycle.WaitAfterStartDelay
 }
 
 func (c *Container) imageReference() string {

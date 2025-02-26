@@ -624,6 +624,9 @@ func validateContainersConfig(ctx context.Context, parentEnv *env.ConfigEnvManag
 		if ct.Lifecycle.StopTimeout < 0 {
 			return fmt.Errorf("container stop timeout %d cannot be negative in %s", ct.Lifecycle.StopTimeout, loc)
 		}
+		if ct.Lifecycle.WaitAfterStartDelay < 0 {
+			return fmt.Errorf("container wait after start delay %d cannot be negative in %s", ct.Lifecycle.WaitAfterStartDelay, loc)
+		}
 
 		if len(ct.User.PrimaryGroup) > 0 && len(ct.User.User) == 0 {
 			return fmt.Errorf("container user primary group cannot be set without setting the user in %s", loc)
