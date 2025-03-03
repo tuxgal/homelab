@@ -9,7 +9,7 @@ import (
 const (
 	FakeHostName              = "fakehost"
 	FakeHumanFriendlyHostName = "FakeHost"
-	FakeHostIP                = "10.76.77.78"
+	FakeHostIPV4              = "10.76.77.78"
 	FakeHostNumCPUs           = 32
 	FakeHostOS                = "linux"
 	FakeHostArch              = "amd64"
@@ -20,7 +20,7 @@ func NewFakeHostInfo() *host.HostInfo {
 	return &host.HostInfo{
 		HostName:              FakeHostName,
 		HumanFriendlyHostName: FakeHumanFriendlyHostName,
-		IP:                    netip.MustParseAddr(FakeHostIP),
+		IPV4:                  netip.MustParseAddr(FakeHostIPV4),
 		NumCPUs:               FakeHostNumCPUs,
 		OS:                    FakeHostOS,
 		Arch:                  FakeHostArch,

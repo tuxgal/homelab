@@ -119,7 +119,7 @@ var applyConfigEnvToContainerTests = []struct {
 					{
 						ContainerPort: "$$MY_CONTAINER_PORT$$",
 						Protocol:      "tcp",
-						HostIP:        "$$HOST_IP$$",
+						HostIP:        "$$HOST_IPV4$$",
 						HostPort:      "$$MY_HOST_PORT$$",
 					},
 				},
@@ -860,7 +860,7 @@ var applyConfigEnvToGlobalTests = []struct {
 					{
 						Name: "some-other-mount-13",
 						Type: "bind",
-						Src:  "/$$HOST_IP$$/abc/xyz",
+						Src:  "/$$HOST_IPV4$$/abc/xyz",
 						Dst:  "/abc/xyz",
 					},
 					{

@@ -17,8 +17,8 @@ var systemConfigEnvManagerApplyTests = []struct {
 	want  string
 }{
 	{
-		name:  "System Config Env Manager - Apply - HOST_IP",
-		input: "foo-$$HOST_IP$$-bar",
+		name:  "System Config Env Manager - Apply - HOST_IPV4",
+		input: "foo-$$HOST_IPV4$$-bar",
 		want:  "foo-10.76.77.78-bar",
 	},
 	{
@@ -53,7 +53,7 @@ var systemConfigEnvManagerApplyTests = []struct {
 	},
 	{
 		name:  "System Config Env Manager - Apply - Multiple",
-		input: "foo-$$HOST_NAME$$-$$HOST_IP$$-$$USER_NAME$$-$$USER_PRIMARY_GROUP_NAME$$",
+		input: "foo-$$HOST_NAME$$-$$HOST_IPV4$$-$$USER_NAME$$-$$USER_PRIMARY_GROUP_NAME$$",
 		want:  "foo-fakehost-10.76.77.78-fakeuser-fakegroup1",
 	},
 }
@@ -100,7 +100,7 @@ var globalConfigEnvManagerApplyTests = []struct {
 		want:  "/home/foobar/dummy-base-dir/foo/bar/baz",
 	},
 	{
-		name: "Global Config Env Manager - Apply - HOST_IP",
+		name: "Global Config Env Manager - Apply - HOST_IPV4",
 		globalEnvMap: EnvMap{
 			"MY_ENV_1": "my-env-1",
 			"MY_ENV_2": "my-env-2",
@@ -109,7 +109,7 @@ var globalConfigEnvManagerApplyTests = []struct {
 			"MY_ENV_1",
 			"MY_ENV_2",
 		},
-		input: "foo-$$HOST_IP$$-bar",
+		input: "foo-$$HOST_IPV4$$-bar",
 		want:  "foo-10.76.77.78-bar",
 	},
 	{
@@ -352,7 +352,7 @@ var containerConfigEnvManagerApplyTests = []struct {
 		want:  "/home/foobar/dummy-base-dir/foo/bar/baz",
 	},
 	{
-		name: "Container Config Env Manager - Apply - HOST_IP",
+		name: "Container Config Env Manager - Apply - HOST_IPV4",
 		globalEnvMap: EnvMap{
 			"MY_ENV_1": "my-env-1",
 			"MY_ENV_2": "my-env-2",
@@ -369,7 +369,7 @@ var containerConfigEnvManagerApplyTests = []struct {
 			"MY_CT_ENV_1",
 			"MY_CT_ENV_2",
 		},
-		input: "foo-$$HOST_IP$$-bar",
+		input: "foo-$$HOST_IPV4$$-bar",
 		want:  "foo-10.76.77.78-bar",
 	},
 	{

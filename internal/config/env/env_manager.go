@@ -9,7 +9,7 @@ import (
 )
 
 var (
-	configEnvHostIP                = "HOST_IP"
+	configEnvHostIPV4              = "HOST_IPV4"
 	configEnvHostName              = "HOST_NAME"
 	configEnvHumanFriendlyHostName = "HUMAN_FRIENDLY_HOST_NAME"
 	configEnvUserName              = "USER_NAME"
@@ -89,7 +89,7 @@ func defaultEnv(ctx context.Context) (EnvMap, EnvOrder) {
 	h := host.MustHostInfo(ctx)
 	u := user.MustUserInfo(ctx)
 	return EnvMap{
-			configEnvHostIP:                h.IP.String(),
+			configEnvHostIPV4:              h.IPV4.String(),
 			configEnvHostName:              h.HostName,
 			configEnvHumanFriendlyHostName: h.HumanFriendlyHostName,
 			configEnvUserName:              u.User.Username,
@@ -97,7 +97,7 @@ func defaultEnv(ctx context.Context) (EnvMap, EnvOrder) {
 			configEnvUserPrimaryGroupName:  u.PrimaryGroup.Name,
 			configEnvUserPrimaryGroupID:    u.PrimaryGroup.Gid,
 		}, EnvOrder{
-			configEnvHostIP,
+			configEnvHostIPV4,
 			configEnvHostName,
 			configEnvHumanFriendlyHostName,
 			configEnvUserName,

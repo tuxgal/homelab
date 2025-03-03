@@ -303,7 +303,7 @@ containers:
       publishedPorts:
         - containerPort: $$MY_CT_PORT_1$$
           proto: tcp
-          hostIp: $$HOST_IP$$
+          hostIp: $$HOST_IPV4$$
           hostPort: $$MY_HOST_PORT_1$$
         - containerPort: $$MY_CT_PORT_2$$
           proto: udp

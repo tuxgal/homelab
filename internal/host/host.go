@@ -13,7 +13,7 @@ import (
 type HostInfo struct {
 	HostName              string
 	HumanFriendlyHostName string
-	IP                    netip.Addr
+	IPV4                  netip.Addr
 	NumCPUs               int
 	OS                    string
 	Arch                  string
@@ -29,7 +29,7 @@ const (
 func NewHostInfo(ctx context.Context) *HostInfo {
 	res := HostInfo{
 		HumanFriendlyHostName: systemHostName(ctx),
-		IP:                    interfaceIP(ctx),
+		IPV4:                  interfaceIPV4(ctx),
 		NumCPUs:               runtime.NumCPU(),
 		OS:                    runtime.GOOS,
 		Arch:                  runtime.GOARCH,
@@ -39,7 +39,7 @@ func NewHostInfo(ctx context.Context) *HostInfo {
 
 	log(ctx).Debugf("Host name: %s", res.HostName)
 	log(ctx).Debugf("Human Friendly Host name: %s", res.HumanFriendlyHostName)
-	log(ctx).Debugf("Host IP: %s", res.IP)
+	log(ctx).Debugf("Host v4 IP: %s", res.IPV4)
 	log(ctx).Debugf("Num CPUs = %d", res.NumCPUs)
 	log(ctx).Debugf("OS = %s", res.OS)
 	log(ctx).Debugf("Arch = %s", res.Arch)
@@ -64,10 +64,10 @@ func systemHostName(ctx context.Context) string {
 	return res
 }
 
-func interfaceIP(ctx context.Context) netip.Addr {
+func interfaceIPV4(ctx context.Context) netip.Addr {
 	conn, err := net.Dial("udp", "10.1.1.1:1234")
 	if err != nil {
-		log(ctx).Fatalf("Unable to determine the current machine's IP, %v", err)
+		log(ctx).Fatalf("Unable to determine the current machine's v4 IP, %v", err)
 	}
 	defer conn.Close()
 
