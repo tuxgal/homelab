@@ -11,7 +11,7 @@ require (
 	github.com/docker/go-units v0.5.0
 	github.com/google/go-cmp v0.7.0
 	github.com/moby/term v0.5.2
-	github.com/opencontainers/image-spec v1.1.0
+	github.com/opencontainers/image-spec v1.1.1
 	github.com/sasha-s/go-deadlock v0.3.5
 	github.com/spf13/cobra v1.9.1
 	github.com/tuxgal/tuxlog v0.4.0
