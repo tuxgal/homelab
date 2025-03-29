@@ -17,6 +17,7 @@ func StartCmd(ctx context.Context, opts *clicommon.GlobalCmdOptions) *cobra.Comm
 		Long:  `Starts one or more containers in the requested group as specified in the homelab configuration. Containers can be started individually, as a group or all groups (by using 'all' as the group name).`,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
+				//nolint:staticcheck
 				return fmt.Errorf("Expected exactly one group name argument to be specified, but found %d instead", len(args))
 			}
 			return nil

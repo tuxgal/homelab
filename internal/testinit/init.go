@@ -14,6 +14,7 @@ func init() {
 func repoBaseDirAsWorkDir() {
 	wd, err := os.Getwd()
 	if err != nil {
+		//nolint:staticcheck
 		panic(fmt.Errorf("Unable to set the repo base dir as the current directory in tests, reason: %w", err))
 	}
 
@@ -22,10 +23,12 @@ func repoBaseDirAsWorkDir() {
 	}
 
 	if wd == "/" {
+		//nolint:staticcheck
 		panic(fmt.Errorf("Unable to find the homelab repo base directory to set as the current directory in tests"))
 	}
 
 	if err := os.Chdir(wd); err != nil {
+		//nolint:staticcheck
 		panic(fmt.Errorf("Unable to change the current directory to %s in tests, reason: %w", wd, err))
 	}
 }

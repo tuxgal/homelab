@@ -813,15 +813,17 @@ func (c *Container) mountsOfType(mountType string) []*mountSpec {
 }
 
 func buildMountSpec(mount *config.Mount) *mountSpec {
-	if mount.Type == "bind" {
+	switch mount.Type {
+	case "bind":
 		if mount.ReadOnly {
 			return &mountSpec{spec: fmt.Sprintf("%s:%s:ro", mount.Src, mount.Dst)}
 		}
 		return &mountSpec{spec: fmt.Sprintf("%s:%s", mount.Src, mount.Dst)}
-	} else if mount.Type == "tmpfs" {
+	case "tmpfs":
 		return &mountSpec{spec: mount.Dst, tmpfsSize: mount.TmpfsSize}
+	default:
+		panic(fmt.Sprintf("invalid mount type %s", mount.Type))
 	}
-	panic(fmt.Sprintf("invalid mount type %s", mount.Type))
 }
 
 func tmpfsOptions(mount *mountSpec) *dmount.TmpfsOptions {

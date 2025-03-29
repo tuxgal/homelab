@@ -629,7 +629,7 @@ var containerStartErrorTests = []struct {
 				},
 			}),
 		},
-		want: `Failed to start container g1-c1, reason:image abc/xyz not available locally after a successful pull, possibly indicating a bug or a system failure!`,
+		want: `Failed to start container g1-c1, reason:image abc/xyz not available locally after a successful pull, possibly indicating a bug or a system failure`,
 	},
 	{
 		name: "Container Start - Kill Existing Container Fails",

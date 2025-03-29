@@ -21,6 +21,7 @@ func (c *CLIConfig) parse(ctx context.Context, path string) error {
 	if err != nil {
 		return fmt.Errorf("failed to open homelab CLI config file, reason: %w", err)
 	}
+	//nolint:errcheck
 	defer configFile.Close()
 
 	dec := yaml.NewDecoder(configFile)

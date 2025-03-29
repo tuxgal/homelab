@@ -17,6 +17,7 @@ func DeleteCmd(ctx context.Context, opts *clicommon.GlobalCmdOptions) *cobra.Com
 		Long:  `Deletes one or more networks that are specified in the homelab configuration.`,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
+				//nolint:staticcheck
 				return fmt.Errorf("Expected exactly one network name argument to be specified, but found %d instead", len(args))
 			}
 			return nil

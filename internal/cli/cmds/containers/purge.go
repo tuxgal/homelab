@@ -17,6 +17,7 @@ func PurgeCmd(ctx context.Context, opts *clicommon.GlobalCmdOptions) *cobra.Comm
 		Long:  `Purges the requested container as specified in the homelab configuration. The name is specified in the group/container format.`,
 		PreRunE: func(cmd *cobra.Command, args []string) error {
 			if len(args) != 1 {
+				//nolint:staticcheck
 				return fmt.Errorf("Expected exactly one container name argument to be specified, but found %d instead", len(args))
 			}
 			_, _, err := validateContainerName(args[0])

@@ -57,6 +57,7 @@ func (d *Client) PullImage(ctx context.Context, imageName string) error {
 	if err != nil {
 		return fmt.Errorf("failed to pull the image %s, reason: %w", imageName, err)
 	}
+	//nolint:errcheck
 	defer progress.Close()
 
 	// Perform the actual image pull.
@@ -83,7 +84,8 @@ func (d *Client) PullImage(ctx context.Context, imageName string) error {
 	// of the image.
 	avail, newId := d.QueryLocalImage(ctx, imageName)
 	if !avail {
-		return fmt.Errorf("image %s not available locally after a successful pull, possibly indicating a bug or a system failure!", imageName)
+		//nolint:staticcheck
+		return fmt.Errorf("image %s not available locally after a successful pull, possibly indicating a bug or a system failure", imageName)
 	}
 
 	// If pull progress was already shown, no need to show the updates again.
@@ -276,6 +278,7 @@ func (d *Client) ContainerPurgeKillAttempts() uint32 {
 }
 
 func (d *Client) Close() {
+	//nolint:errcheck
 	d.client.Close()
 }
 

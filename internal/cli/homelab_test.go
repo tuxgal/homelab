@@ -1351,7 +1351,7 @@ var executeHomelabCmdErrorTests = []struct {
 		ctxInfo: &testutils.TestContextInfo{
 			DockerHost: fakedocker.NewEmptyFakeDockerHost(),
 		},
-		want: `Container name must be specified in the form 'group/container'`,
+		want: `container name must be specified in the form 'group/container'`,
 	},
 	{
 		name: "Homelab Command - Containers Stop - Invalid Container Name",
@@ -1363,7 +1363,7 @@ var executeHomelabCmdErrorTests = []struct {
 		ctxInfo: &testutils.TestContextInfo{
 			DockerHost: fakedocker.NewEmptyFakeDockerHost(),
 		},
-		want: `Container name must be specified in the form 'group/container'`,
+		want: `container name must be specified in the form 'group/container'`,
 	},
 	{
 		name: "Homelab Command - Containers Purge - Invalid Container Name",
@@ -1375,7 +1375,7 @@ var executeHomelabCmdErrorTests = []struct {
 		ctxInfo: &testutils.TestContextInfo{
 			DockerHost: fakedocker.NewEmptyFakeDockerHost(),
 		},
-		want: `Container name must be specified in the form 'group/container'`,
+		want: `container name must be specified in the form 'group/container'`,
 	},
 	{
 		name: "Homelab Command - Groups Start - Failure",

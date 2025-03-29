@@ -161,11 +161,12 @@ func (n *Network) Mode() NetworkMode {
 }
 
 func (n *Network) String() string {
-	if n.mode == NetworkModeBridge {
+	switch n.mode {
+	case NetworkModeBridge:
 		return fmt.Sprintf("{Network (Bridge) Name: %s}", n.Name())
-	} else if n.mode == NetworkModeContainer {
+	case NetworkModeContainer:
 		return fmt.Sprintf("{Network (Container) Name: %s}", n.Name())
-	} else {
+	default:
 		panic("unknown network mode, possibly indicating a bug in the code!")
 	}
 }

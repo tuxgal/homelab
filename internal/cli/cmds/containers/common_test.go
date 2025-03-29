@@ -23,7 +23,7 @@ var mustContainerNamePanicTests = []struct {
 func TestMustContainerNamePanics(t *testing.T) {
 	t.Parallel()
 
-	want := `Container name must be specified in the form 'group/container'`
+	want := `container name must be specified in the form 'group/container'`
 	for _, tc := range mustContainerNamePanicTests {
 		t.Run(tc.name, func(t *testing.T) {
 			t.Parallel()

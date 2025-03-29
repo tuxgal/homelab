@@ -69,6 +69,7 @@ func interfaceIPV4(ctx context.Context) netip.Addr {
 	if err != nil {
 		log(ctx).Fatalf("Unable to determine the current machine's v4 IP, %v", err)
 	}
+	//nolint:errcheck
 	defer conn.Close()
 
 	ip, ok := netip.AddrFromSlice(conn.LocalAddr().(*net.UDPAddr).IP)

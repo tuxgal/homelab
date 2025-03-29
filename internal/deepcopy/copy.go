@@ -23,7 +23,7 @@ func Copy[T any](src T) (T, error) {
 	val, err := copyInternal(srcValue)
 	if err != nil {
 		var dst T
-		return dst, fmt.Errorf("Deep Copy failed, reason: %w", err)
+		return dst, fmt.Errorf("deep Copy failed, reason: %w", err)
 	}
 
 	return val.Interface().(T), nil

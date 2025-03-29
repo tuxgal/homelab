@@ -472,41 +472,41 @@ var deepCopyErrorTests = []struct {
 	{
 		name:  "Deep Copy - Array - Error",
 		input: [1]func(int, bool){func(a int, b bool) {}},
-		want:  `Deep Copy failed, reason: cannot handle non-nil type func\(int, bool\)`,
+		want:  `deep Copy failed, reason: cannot handle non-nil type func\(int, bool\)`,
 	},
 	{
 		name:  "Deep Copy - Chan - Error",
 		input: makeIntChan(),
-		want:  `Deep Copy failed, reason: cannot handle non-nil type chan int`,
+		want:  `deep Copy failed, reason: cannot handle non-nil type chan int`,
 	},
 	{
 		name:  "Deep Copy - Func - Error",
 		input: func(a int, b string) {},
-		want:  `Deep Copy failed, reason: cannot handle non-nil type func\(int, string\)`,
+		want:  `deep Copy failed, reason: cannot handle non-nil type func\(int, string\)`,
 	},
 	{
 		name: "Deep Copy - Map - Error",
 		input: map[string]func(bool){
 			"foobar": func(b bool) {},
 		},
-		want: `Deep Copy failed, reason: cannot handle non-nil type func\(bool\)`,
+		want: `deep Copy failed, reason: cannot handle non-nil type func\(bool\)`,
 	},
 	{
 		name:  "Deep Copy - Pointer - Error",
 		input: makeIntChanPtr(),
-		want:  `Deep Copy failed, reason: cannot handle non-nil type chan int`,
+		want:  `deep Copy failed, reason: cannot handle non-nil type chan int`,
 	},
 	{
 		name:  "Deep Copy - Slice - Error",
 		input: []func(int){func(a int) {}},
-		want:  `Deep Copy failed, reason: cannot handle non-nil type func\(int\)`,
+		want:  `deep Copy failed, reason: cannot handle non-nil type func\(int\)`,
 	},
 	{
 		name: "Deep Copy - Struct - Error",
 		input: struct2{
 			F3: func(a int, b string) bool { return true },
 		},
-		want: `Deep Copy failed, reason: cannot handle non-nil type func\(int, string\) bool`,
+		want: `deep Copy failed, reason: cannot handle non-nil type func\(int, string\) bool`,
 	},
 }
 

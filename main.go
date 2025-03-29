@@ -51,9 +51,10 @@ func buildLogger(ctx context.Context, dest io.Writer) tuxlogi.Logger {
 func updateHomelabInspectLevel(ctx context.Context) context.Context {
 	val, isVarSet := os.LookupEnv(homelabInspectLevelEnvVar)
 	if isVarSet {
-		if val == homelabInspectLevelEnvTrace {
+		switch val {
+		case homelabInspectLevelEnvTrace:
 			return inspect.WithHomelabInspectLevel(ctx, inspect.HomelabInspectLevelTrace)
-		} else if val == homelabInspectLevelEnvDebug {
+		case homelabInspectLevelEnvDebug:
 			return inspect.WithHomelabInspectLevel(ctx, inspect.HomelabInspectLevelDebug)
 		}
 	}
