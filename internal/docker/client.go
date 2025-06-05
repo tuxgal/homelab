@@ -8,11 +8,11 @@ import (
 	"reflect"
 	"strings"
 
+	cerrdefs "github.com/containerd/errdefs"
 	dcontainer "github.com/docker/docker/api/types/container"
 	dfilters "github.com/docker/docker/api/types/filters"
 	dimage "github.com/docker/docker/api/types/image"
 	dnetwork "github.com/docker/docker/api/types/network"
-	dclient "github.com/docker/docker/client"
 	ocispec "github.com/opencontainers/image-spec/specs-go/v1"
 	"github.com/tuxgal/homelab/internal/host"
 	"github.com/tuxgal/homelab/internal/inspect"
@@ -189,7 +189,7 @@ func (d *Client) RemoveContainer(ctx context.Context, containerName string) erro
 
 func (d *Client) GetContainerState(ctx context.Context, containerName string) (ContainerState, error) {
 	c, err := d.client.ContainerInspect(ctx, containerName)
-	if dclient.IsErrNotFound(err) {
+	if cerrdefs.IsNotFound(err) {
 		return ContainerStateNotFound, nil
 	}
 	if err != nil {
