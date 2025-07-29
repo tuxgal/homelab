@@ -7,7 +7,7 @@ toolchain go1.23.6
 require (
 	github.com/TwiN/deepmerge v0.2.2
 	github.com/containerd/errdefs v1.0.0
-	github.com/docker/docker v28.2.2+incompatible
+	github.com/docker/docker v28.3.3+incompatible
 	github.com/docker/go-connections v0.5.0
 	github.com/docker/go-units v0.5.0
 	github.com/google/go-cmp v0.7.0
