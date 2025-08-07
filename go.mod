@@ -17,7 +17,7 @@ require (
 	github.com/spf13/cobra v1.9.1
 	github.com/tuxgal/tuxlog v0.4.0
 	github.com/tuxgal/tuxlogi v0.3.0
-	golang.org/x/sys v0.33.0
+	golang.org/x/sys v0.35.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
