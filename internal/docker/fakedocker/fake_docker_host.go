@@ -417,9 +417,6 @@ func (f *FakeDockerHost) ImageList(ctx context.Context, options dimage.ListOptio
 	if options.SharedSize {
 		return nil, fmt.Errorf("retieving shared size of images on the fake docker host is unsupported")
 	}
-	if options.ContainerCount {
-		return nil, fmt.Errorf("retieving container count for images on the fake docker host is unsupported")
-	}
 	if options.Manifests {
 		return nil, fmt.Errorf("retieving manifests for images on the fake docker host is unsupported")
 	}
