@@ -1,6 +1,6 @@
 module github.com/tuxgal/homelab
 
-go 1.24.0
+go 1.25.0
 
 require (
 	github.com/TwiN/deepmerge v0.2.2
@@ -15,7 +15,7 @@ require (
 	github.com/spf13/cobra v1.10.2
 	github.com/tuxgal/tuxlog v0.4.0
 	github.com/tuxgal/tuxlogi v0.3.0
-	golang.org/x/sys v0.40.0
+	golang.org/x/sys v0.45.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
