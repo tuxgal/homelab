@@ -188,7 +188,7 @@ func (d *Deployment) String() string {
 	} else {
 		sb.WriteString(d.Groups[d.GroupsOrder[0]].String())
 		for i := 1; i < len(d.GroupsOrder); i++ {
-			sb.WriteString(fmt.Sprintf(", %s", d.Groups[d.GroupsOrder[i]]))
+			fmt.Fprintf(&sb, ", %s", d.Groups[d.GroupsOrder[i]])
 		}
 	}
 
@@ -198,7 +198,7 @@ func (d *Deployment) String() string {
 	} else {
 		sb.WriteString(d.Networks[d.NetworksOrder[0]].String())
 		for i := 1; i < len(d.NetworksOrder); i++ {
-			sb.WriteString(fmt.Sprintf(", %s", d.Networks[d.NetworksOrder[i]]))
+			fmt.Fprintf(&sb, ", %s", d.Networks[d.NetworksOrder[i]])
 		}
 		sb.WriteString("]}")
 	}

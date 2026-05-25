@@ -46,7 +46,7 @@ func ExecContainerGroupCmd(ctx context.Context, cmd, action, group, container st
 	if len(errList) > 0 {
 		var sb strings.Builder
 		for i, e := range errList {
-			sb.WriteString(fmt.Sprintf("\n%d - %s", i+1, e))
+			fmt.Fprintf(&sb, "\n%d - %s", i+1, e)
 		}
 		return fmt.Errorf("%s failed for %d containers, reason(s):%s", cmd, len(errList), sb.String())
 	}

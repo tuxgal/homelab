@@ -40,7 +40,7 @@ func ExecNetworksCmd(ctx context.Context, cmd, action, network string, dep *depl
 	if len(errList) > 0 {
 		var sb strings.Builder
 		for i, e := range errList {
-			sb.WriteString(fmt.Sprintf("\n%d - %s", i+1, e))
+			fmt.Fprintf(&sb, "\n%d - %s", i+1, e)
 		}
 		return fmt.Errorf("%s failed for %d networks, reason(s):%s", cmd, len(errList), sb.String())
 	}

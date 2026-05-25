@@ -46,7 +46,7 @@ func (c *ContainerGroup) updateContainersOrder() {
 
 func (c *ContainerGroup) String() string {
 	var sb strings.Builder
-	sb.WriteString(fmt.Sprintf("Group{Name:%s Containers:[", c.name()))
+	fmt.Fprintf(&sb, "Group{Name:%s Containers:[", c.name())
 	if len(c.containersOrder) == 0 {
 		sb.WriteString("empty]}")
 		return sb.String()
@@ -54,7 +54,7 @@ func (c *ContainerGroup) String() string {
 
 	sb.WriteString(c.containers[c.containersOrder[0]].String())
 	for i := 1; i < len(c.containersOrder); i++ {
-		sb.WriteString(fmt.Sprintf(", %s", c.containers[c.containersOrder[i]]))
+		fmt.Fprintf(&sb, ", %s", c.containers[c.containersOrder[i]])
 	}
 	sb.WriteString("]}")
 	return sb.String()
