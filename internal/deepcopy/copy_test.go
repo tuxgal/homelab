@@ -27,15 +27,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Bool Pointer - Nil",
-		input: newutils.NewNilBool(),
+		input: newutils.Nil[bool](),
 	},
 	{
 		name:  "Deep Copy - Bool Pointer - True",
-		input: newutils.NewBool(true),
+		input: newutils.Ptr(true),
 	},
 	{
 		name:  "Deep Copy - Bool Pointer - False",
-		input: newutils.NewBool(false),
+		input: newutils.Ptr(false),
 	},
 	{
 		name:  "Deep Copy - Int - Zero Value",
@@ -47,15 +47,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Int Pointer - Nil",
-		input: newutils.NewNilInt(),
+		input: newutils.Nil[int](),
 	},
 	{
 		name:  "Deep Copy - Int Pointer - Zero Value",
-		input: newutils.NewInt(0),
+		input: newutils.Ptr(0),
 	},
 	{
 		name:  "Deep Copy - Int Pointer - Non-Zero Value",
-		input: newutils.NewInt(-62825094),
+		input: newutils.Ptr(-62825094),
 	},
 	{
 		name:  "Deep Copy - Int8 - Zero Value",
@@ -67,15 +67,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Int8 Pointer - Nil",
-		input: newutils.NewNilInt8(),
+		input: newutils.Nil[int8](),
 	},
 	{
 		name:  "Deep Copy - Int8 Pointer - Zero Value",
-		input: newutils.NewInt8(0),
+		input: newutils.Ptr[int8](0),
 	},
 	{
 		name:  "Deep Copy - Int8 Pointer - Non-Zero Value",
-		input: newutils.NewInt8(-43),
+		input: newutils.Ptr[int8](-43),
 	},
 	{
 		name:  "Deep Copy - Int16 - Zero Value",
@@ -87,15 +87,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Int16 Pointer - Nil",
-		input: newutils.NewNilInt16(),
+		input: newutils.Nil[int16](),
 	},
 	{
 		name:  "Deep Copy - Int16 Pointer - Zero Value",
-		input: newutils.NewInt16(0),
+		input: newutils.Ptr[int16](0),
 	},
 	{
 		name:  "Deep Copy - Int16 Pointer - Non-Zero Value",
-		input: newutils.NewInt16(7542),
+		input: newutils.Ptr[int16](7542),
 	},
 	{
 		name:  "Deep Copy - Int32 - Zero Value",
@@ -107,15 +107,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Int32 Pointer - Nil",
-		input: newutils.NewNilInt32(),
+		input: newutils.Nil[int32](),
 	},
 	{
 		name:  "Deep Copy - Int32 Pointer - Zero Value",
-		input: newutils.NewInt32(0),
+		input: newutils.Ptr[int32](0),
 	},
 	{
 		name:  "Deep Copy - Int32 Pointer - Non-Zero Value",
-		input: newutils.NewInt32(-937231951),
+		input: newutils.Ptr[int32](-937231951),
 	},
 	{
 		name:  "Deep Copy - Int64 - Zero Value",
@@ -127,15 +127,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Int64 Pointer - Nil",
-		input: newutils.NewNilInt64(),
+		input: newutils.Nil[int64](),
 	},
 	{
 		name:  "Deep Copy - Int64 Pointer - Zero Value",
-		input: newutils.NewInt64(0),
+		input: newutils.Ptr[int64](0),
 	},
 	{
 		name:  "Deep Copy - Int64 Pointer - Non-Zero Value",
-		input: newutils.NewInt64(-2978903752356259252),
+		input: newutils.Ptr[int64](-2978903752356259252),
 	},
 	{
 		name:  "Deep Copy - Uint - Zero Value",
@@ -147,15 +147,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Uint Pointer - Nil",
-		input: newutils.NewNilUint(),
+		input: newutils.Nil[uint](),
 	},
 	{
 		name:  "Deep Copy - Uint Pointer - Zero Value",
-		input: newutils.NewUint(0),
+		input: newutils.Ptr[uint](0),
 	},
 	{
 		name:  "Deep Copy - Uint Pointer - Non-Zero Value",
-		input: newutils.NewUint(9357355265295),
+		input: newutils.Ptr[uint](9357355265295),
 	},
 	{
 		name:  "Deep Copy - Uint8 - Zero Value",
@@ -167,15 +167,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Uint8 Pointer - Nil",
-		input: newutils.NewNilUint8(),
+		input: newutils.Nil[uint8](),
 	},
 	{
 		name:  "Deep Copy - Uint8 Pointer - Zero Value",
-		input: newutils.NewUint8(0),
+		input: newutils.Ptr[uint8](0),
 	},
 	{
 		name:  "Deep Copy - Uint8 Pointer - Non-Zero Value",
-		input: newutils.NewUint8(243),
+		input: newutils.Ptr[uint8](243),
 	},
 	{
 		name:  "Deep Copy - Uint16 - Zero Value",
@@ -187,15 +187,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Uint16 Pointer - Nil",
-		input: newutils.NewNilUint16(),
+		input: newutils.Nil[uint16](),
 	},
 	{
 		name:  "Deep Copy - Uint16 Pointer - Zero Value",
-		input: newutils.NewUint16(0),
+		input: newutils.Ptr[uint16](0),
 	},
 	{
 		name:  "Deep Copy - Uint16 Pointer - Non-Zero Value",
-		input: newutils.NewUint16(9224),
+		input: newutils.Ptr[uint16](9224),
 	},
 	{
 		name:  "Deep Copy - Uint32 - Zero Value",
@@ -207,15 +207,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Uint32 Pointer - Nil",
-		input: newutils.NewNilUint32(),
+		input: newutils.Nil[uint32](),
 	},
 	{
 		name:  "Deep Copy - Uint32 Pointer - Zero Value",
-		input: newutils.NewUint32(0),
+		input: newutils.Ptr[uint32](0),
 	},
 	{
 		name:  "Deep Copy - Uint32 Pointer - Non-Zero Value",
-		input: newutils.NewUint32(874274872),
+		input: newutils.Ptr[uint32](874274872),
 	},
 	{
 		name:  "Deep Copy - Uint64 - Zero Value",
@@ -227,15 +227,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Uint64 Pointer - Nil",
-		input: newutils.NewNilUint64(),
+		input: newutils.Nil[uint64](),
 	},
 	{
 		name:  "Deep Copy - Uint64 Pointer - Zero Value",
-		input: newutils.NewUint64(0),
+		input: newutils.Ptr[uint64](0),
 	},
 	{
 		name:  "Deep Copy - Uint64 Pointer - Non-Zero Value",
-		input: newutils.NewUint64(975937538563875368),
+		input: newutils.Ptr[uint64](975937538563875368),
 	},
 	{
 		name:  "Deep Copy - Uintptr - Zero Value",
@@ -255,15 +255,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Float32 Pointer - Nil",
-		input: newutils.NewNilFloat32(),
+		input: newutils.Nil[float32](),
 	},
 	{
 		name:  "Deep Copy - Float32 Pointer - Zero Value",
-		input: newutils.NewFloat32(0),
+		input: newutils.Ptr[float32](0),
 	},
 	{
 		name:  "Deep Copy - Float32 Pointer - Non-Zero Value",
-		input: newutils.NewFloat32(95645.552527562),
+		input: newutils.Ptr[float32](95645.552527562),
 	},
 	{
 		name:  "Deep Copy - Float64 - Zero Value",
@@ -275,15 +275,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Float64 Pointer - Nil",
-		input: newutils.NewNilFloat64(),
+		input: newutils.Nil[float64](),
 	},
 	{
 		name:  "Deep Copy - Float64 Pointer - Zero Value",
-		input: newutils.NewFloat64(0),
+		input: newutils.Ptr[float64](0),
 	},
 	{
 		name:  "Deep Copy - Float64 Pointer - Non-Zero Value",
-		input: newutils.NewFloat64(-52525.52636222523),
+		input: newutils.Ptr[float64](-52525.52636222523),
 	},
 	{
 		name:  "Deep Copy - Complex64 - Zero Value",
@@ -295,15 +295,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Complex64 Pointer - Nil",
-		input: newutils.NewNilComplex64(),
+		input: newutils.Nil[complex64](),
 	},
 	{
 		name:  "Deep Copy - Complex64 Pointer - Zero Value",
-		input: newutils.NewComplex64(0),
+		input: newutils.Ptr[complex64](0),
 	},
 	{
 		name:  "Deep Copy - Complex64 Pointer - Non-Zero Value",
-		input: newutils.NewComplex64(535.5353 - 636363.52342i),
+		input: newutils.Ptr[complex64](535.5353 - 636363.52342i),
 	},
 	{
 		name:  "Deep Copy - Complex128 - Zero Value",
@@ -315,15 +315,15 @@ var deepCopyTests = []struct {
 	},
 	{
 		name:  "Deep Copy - Complex128 Pointer - Nil",
-		input: newutils.NewNilComplex128(),
+		input: newutils.Nil[complex128](),
 	},
 	{
 		name:  "Deep Copy - Complex128 Pointer - Zero Value",
-		input: newutils.NewComplex128(0),
+		input: newutils.Ptr[complex128](0),
 	},
 	{
 		name:  "Deep Copy - Complex128 Pointer - Non-Zero Value",
-		input: newutils.NewComplex128(-6353453.636363 - 96435334.2425i),
+		input: newutils.Ptr[complex128](-6353453.636363 - 96435334.2425i),
 	},
 	{
 		name:  "Deep Copy - Array - Zero Length",

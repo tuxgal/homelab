@@ -131,7 +131,7 @@ func (n *Network) createOptions() dnetwork.CreateOptions {
 	return dnetwork.CreateOptions{
 		Driver:     "bridge",
 		Scope:      "local",
-		EnableIPv6: newutils.NewBool(false),
+		EnableIPv6: newutils.Ptr(false),
 		IPAM: &dnetwork.IPAM{
 			Driver: "default",
 			Config: ipamConfigs,
