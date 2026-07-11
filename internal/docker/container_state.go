@@ -1,5 +1,7 @@
 package docker
 
+type ContainerState uint8
+
 const (
 	ContainerStateUnknown ContainerState = iota
 	ContainerStateNotFound
@@ -11,8 +13,6 @@ const (
 	ContainerStateExited
 	ContainerStateDead
 )
-
-type ContainerState uint8
 
 func (c ContainerState) String() string {
 	switch c {

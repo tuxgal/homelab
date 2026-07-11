@@ -2,19 +2,19 @@ package inspect
 
 import "context"
 
+type HomelabInspectLevel uint8
+
+const (
+	HomelabInspectLevelNone HomelabInspectLevel = iota
+	HomelabInspectLevelDebug
+	HomelabInspectLevelTrace
+)
+
 var (
 	homelabInspectLevelKey = ctxKeyHomelabInspectLevel{}
 )
 
 type ctxKeyHomelabInspectLevel struct{}
-
-const (
-	HomelabInspectLevelNone = iota
-	HomelabInspectLevelDebug
-	HomelabInspectLevelTrace
-)
-
-type HomelabInspectLevel uint8
 
 func HomelabInspectLevelFromContext(ctx context.Context) HomelabInspectLevel {
 	lvl, ok := ctx.Value(homelabInspectLevelKey).(HomelabInspectLevel)
